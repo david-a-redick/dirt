@@ -15,7 +15,7 @@ list_dependencies_debian () {
 list_dependencies_dirt () {
 	# Space delimited list of other dirt packages.
 	echo ""
-} 
+}
 
 fetch () {
 	# Download the source code.
@@ -52,7 +52,7 @@ test () {
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
 	return 0
-} 
+}
 
 install () {
 	# Install the package to the local system.
