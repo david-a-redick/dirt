@@ -14,7 +14,7 @@ dirt-debian is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bou
 
 The `packages` directory contains all the package files and follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).  This was done mostly as a work around for having too many subdirectories in a single directory.
 
-A package is also just a POSIX sh script following a naming pattern of `NAME-VERSION-FEATURES.sh`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
+A package is also just a POSIX sh script following a naming pattern of `NAME-VERSION[-FEATURES].sh`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
 
 Each package contains the following functions executed in this order and may contain comments and hints.  You are expected to be able to read the package file and encourage to experiment.
 
