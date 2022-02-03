@@ -4,7 +4,7 @@ dirt-debian is a dirt simple package manager intended to be run inside an existi
  
 It is a source based personal package manager that draws inspiration from FreeBSD's ports, archlinux's Arch User Repository (AUR), gentoo's portage and little from GoboLinux.
 
-dirt-debian intended to help create official debian packages and experiment with applications not currenting in debian.  When possible official debian packages will be used as the dependencies.  dirt-debian focuses on the end application (leaf node package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible debug settings will be used and very little in the way of optimization or customization is given.
+dirt-debian intended to help create official debian packages and experiment with applications not currently in debian.  When possible official debian packages will be used as the dependencies.  dirt-debian focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
 
 Think of dirt-debian as a [linux-from-scratch](https://www.linuxfromscratch.org/) or gentoo with a very stable core system.  Or even guix but not bothering with providing binaries or repeatable builds.
 
@@ -12,7 +12,7 @@ Think of dirt-debian as a [linux-from-scratch](https://www.linuxfromscratch.org/
 
 dirt-debian is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bourne_shell)) script that follows a life cycle pattern that is a hybred between [port's Makefile](https://docs.freebsd.org/en/books/porters-handbook/order/#porting-order-targets) and [AUR's PKGBUILD](https://wiki.archlinux.org/title/PKGBUILD) file.
 
-The `packages` directory contains all the package files and follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).
+The `packages` directory contains all the package files and follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).  This was done mostly as a work around for having too many subdirectories in a single directory.
 
 A package is also just a POSIX sh script following a naming pattern of `NAME-VERSION-FEATURES.sh`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
 
