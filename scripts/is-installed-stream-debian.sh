@@ -9,7 +9,7 @@ usage () {
 		1>&2 echo "${message}"
 	else
 		echo "${message}"
-	fi 
+	fi
 }
 
 help () {
@@ -47,8 +47,8 @@ $ echo $?
 2
 
 $ ./is-installed-stream-debian.sh 7kaa lgeneral flare kjhlkj 2> /dev/null
-7kaa 
-lgeneral 
+7kaa
+lgeneral
 $ echo $?
 2
 
