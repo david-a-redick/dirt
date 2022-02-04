@@ -49,22 +49,27 @@ patch () {
 
 # Configure the source code's build setup.
 configure () {
+	echo 'todo'
 }
 
 # Compile and otherwise package up for installation or distribution.
 build () {
+	echo 'todo'
 }
 
 # Run unit tests and perform compilation verification.  Known as `check` in AUR.
 test () {
+	echo 'todo'
 } 
 
 # Install the package to the local system.
 install () {
+	echo 'todo'
 }
 
 # Any post install checks ands tests.
 check_install () {
+	echo 'todo'
 }
 
 # Remove any configuration (dot files) and other files created during run time.
