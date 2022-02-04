@@ -7,7 +7,7 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo "autopoint"
+	echo "autopoint gperf texinfo help2man"
 }
 
 list_dependencies_dirt () {
@@ -40,29 +40,24 @@ patch () {
 
 configure () {
 	install_prefix="$1"
-	echo 'we should still be in the same spot'
-	ls -l
+	echo "script is still in the WORKSPACE/dirt-hello-2.12/hello directory"
+	pwd
 	./configure --prefix="$install_prefix"
-	return 0
 }
 
 build () {
 	install_prefix="$1"
-	# Compile and otherwise package up for installation or distribution.
-	return 0
+	make
 }
 
 test () {
 	install_prefix="$1"
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	return 0
+	make check
 }
 
 install () {
 	install_prefix="$1"
-	# Install the package to the local system.
-	return 0
+	make install
 }
 
 check_install () {
