@@ -13,7 +13,7 @@ DIRT_WORKSPACE_PATH="`realpath "$DIRT_WORKSPACE_PATH"`"
 DIRT_INSTALL_PATH="`realpath "$DIRT_INSTALL_PATH"`"
 
 usage () {
-	message='dirt.sh COMMAND PACKAGE'
+	local message='dirt.sh COMMAND PACKAGE'
 	if [ 'err' = "$1" ]; then
 		1>&2 echo "${message}"
 	else
@@ -35,11 +35,11 @@ main () {
 		exit 1
 	fi
 
-	to_run=$1
-	package=$2
+	local to_run=$1
+	local package=$2
 
 	# any function starting with 'command_' is consider to be availible from the cmd line
-	target="command_${to_run}"
+	local target="command_${to_run}"
 	is_function_defined $target
 	if [ 0 -eq $? ]; then
 		$target $package
@@ -50,7 +50,7 @@ main () {
 }
 
 command_search () {
-	package_name="$1"
+	local package_name="$1"
 
 	echo 'Package Groups:'
 	find "$DIRT_PACKAGES_PATH" -type d -iname "*${package_name}*" -print
@@ -60,9 +60,9 @@ command_search () {
 }
 
 command_install () {
-	package_name=$1
+	local package_name=$1
 
-	package_path="`get_package_path $package_name`"
+	local package_path="`get_package_path $package_name`"
 	if [ 0 -ne $? ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
@@ -72,15 +72,17 @@ command_install () {
 
 	check_local
 
-	#need_to_install debian `list_dependencies_debian`
+	need_to_install debian `list_dependencies_debian`
 
 	need_to_install dirt `list_dependencies_dirt`
 
-	prefix="${DIRT_WORKSPACE_PATH}/${package_name}"
-	mkdir -p "${prefix}"
-	cd "${prefix}"
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${workspace}"
+	cd "${workspace}"
 
-	fetch
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+echo "PREFIX" $prefix
+	#fetch
 
 	#verify
 
@@ -90,17 +92,17 @@ command_install () {
 
 	configure "${prefix}"
 
-	#build "${prefix}"
+	build "${prefix}"
 
-	#test "${prefix}"
+	test "${prefix}"
 
-	#install "${prefix}"
+	install "${prefix}"
 
-	#check_install "${prefix}"
+	check_install "${prefix}"
 }
 
 is_function_defined () {
-	function_name="$1"
+	local function_name="$1"
 
 	# use the builtin 'command' to look up the function name
 	# in, what amounts to, the shell's symbol table and print it out.
@@ -115,8 +117,8 @@ is_function_defined () {
 }
 
 contains () {
-	string="$1"
-	substring="$2"
+	local string="$1"
+	local substring="$2"
 
 	# basically getting cdr from the substring ( $1=fooAbar $2=A then bar ).
 	# If there are characters missing then we must have the substring in there.
@@ -131,11 +133,11 @@ contains () {
 
 # look up a single package
 get_package_path () {
-	package_name="$1"
+	local package_name="$1"
 
-	package_group=`get_package_group $package_name`
+	local package_group=`get_package_group $package_name`
 
-	package_path="${DIRT_PACKAGES_PATH}/${package_group}/${package_name}.sh"
+	local package_path="${DIRT_PACKAGES_PATH}/${package_group}/${package_name}.sh"
 	ls "$package_path" > /dev/null 2>&1
 	if [ 0 -eq $? ]; then
 		#echo 'found the package'
@@ -161,12 +163,12 @@ get_package_group () {
 # 	is_a_${system}_package
 #	is_${system}_package_installed
 need_to_install () {
-	system=$1
+	local system=$1
 	shift
 
-	need=
+	local need=
 	while [ $# -ge 1 ]; do
-		package_name=$1
+		local package_name=$1
 		is_a_${system}_package $package_name
 		if [ 0 -eq $? ]; then
 			is_${system}_package_installed $package_name
@@ -209,7 +211,7 @@ is_debian_package_installed () {
 
 # given a single package name, determine if its a real package name or just some letters
 is_a_dirt_package () {
-	package_path="`get_package_path $1`"
+	local package_path="`get_package_path $1`"
 	return $?
 }
 

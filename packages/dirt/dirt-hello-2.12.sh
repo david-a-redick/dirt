@@ -62,7 +62,7 @@ install () {
 
 check_install () {
 	install_prefix="$1"
-	# Any post install checks ands tests.
+	${install_prefix}/bin/hello
 	return 0
 }
 

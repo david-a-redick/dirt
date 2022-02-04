@@ -4,7 +4,7 @@
 #set -x
 
 usage () {
-	message='is-installed-stream-debian.sh PKG_NAME_0 [PKG_NAME_1 ...]'
+	local message='is-installed-stream-debian.sh PKG_NAME_0 [PKG_NAME_1 ...]'
 	if [ 'err' = "$1" ]; then
 		1>&2 echo "${message}"
 	else
@@ -67,7 +67,7 @@ main () {
 	fi
 
 	while [ $# -ge 1 ]; do
-		package_name=$1
+		local package_name=$1
 		is_a_package $package_name
 		if [ 0 -eq $? ]; then
 			is_installed $package_name
@@ -90,7 +90,7 @@ main () {
 # given a single package name, determine if its a real package name or just some letters
 is_a_package () {
 	apt-cache show $1 > /dev/null 2>&1
-	return_code=$?
+	local return_code=$?
 	if [ 0 -ne $return_code ]; then
 		 1>&2 echo "$1 not a debian package."
 	fi
