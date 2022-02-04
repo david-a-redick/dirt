@@ -17,8 +17,12 @@ list_dependencies_dirt () {
 
 fetch () {
 	git clone https://git.savannah.gnu.org/git/hello.git
+
 	cd hello
+	# script will remain in the WORKSPACE/dirt-hello-2.12/hello directory
+
 	git checkout v2.12
+
 	# this will fetch submodules and do some setup.
 	./bootstrap
 }
@@ -39,29 +43,27 @@ patch () {
 }
 
 configure () {
-	install_prefix="$1"
-	echo "script is still in the WORKSPACE/dirt-hello-2.12/hello directory"
-	pwd
+	local install_prefix="$1"
 	./configure --prefix="$install_prefix"
 }
 
 build () {
-	install_prefix="$1"
+	local install_prefix="$1"
 	make
 }
 
 test () {
-	install_prefix="$1"
+	local install_prefix="$1"
 	make check
 }
 
 install () {
-	install_prefix="$1"
+	local install_prefix="$1"
 	make install
 }
 
 check_install () {
-	install_prefix="$1"
+	local install_prefix="$1"
 	${install_prefix}/bin/hello
 	return 0
 }

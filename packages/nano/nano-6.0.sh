@@ -4,14 +4,7 @@
 check_local () {
 	# In real life, this should just return 0.
 	# but provides a nice example.
-	distro_name=`lsb_release -s -i`
-	if [ "Debian" = $distro_name ]; then
-		echo 'Yay.  You have Debian.'
-		return 0
-	else
-		echo 'This is not Debian.'
-		return 1
-	fi
+
 }
 
 # Space delimited list of debian packages.
@@ -19,12 +12,9 @@ list_dependencies_debian () {
 	echo 'libncurses-dev'
 }
 
-# Space delimited list of other dirt packages.
 list_dependencies_dirt () {
-	1>&2 echo 'in real life nano has nothing to do with hello but'
-	1>&2 echo 'it provides an excellent test of the different dependencies.'
-	echo 'dirt-hello-2.12'
-} 
+	""
+}
 
 # Download the source code.  Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 fetch () {

@@ -1,8 +1,14 @@
 # A package that does nothing but fail at the local sanity check.
 
 check_local () {
-	echo 'fail check_local'
-	return 1
+	local distro_name=`lsb_release -s -i`
+	if [ "Debian" = $distro_name ]; then
+		echo 'You have Debian.'
+		return 1
+	else
+		echo 'This is not Debian.'
+		return 1
+	fi
 }
 
 list_dependencies_debian () {

@@ -71,6 +71,9 @@ command_install () {
 	. "$package_path"
 
 	check_local
+	if [ 0 -ne $? ]; then
+		exit 6
+	fi
 
 	need_to_install debian `list_dependencies_debian`
 
@@ -81,14 +84,14 @@ command_install () {
 	cd "${workspace}"
 
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-echo "PREFIX" $prefix
-	#fetch
 
-	#verify
+	fetch
 
-	#extract
+	verify
 
-	#patch
+	extract
+
+	patch
 
 	configure "${prefix}"
 
