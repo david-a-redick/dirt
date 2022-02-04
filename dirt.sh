@@ -71,10 +71,9 @@ command_install () {
 
 	check_local
 
-	debian_deps=`list_dependencies_debian`
-	need_to_install_debian $debian_deps
+	#need_to_install debian `list_dependencies_debian`
 
-	echo "Dirt deps: " `list_dependencies_dirt`
+	need_to_install dirt `list_dependencies_dirt`
 
 	mkdir -p "${DIRT_WORKSPACE_PATH}/${package_name}"
 	cd "$DIRT_WORKSPACE_PATH"
@@ -153,36 +152,43 @@ get_package_group () {
 	echo ${1%%-*}
 }
 
-# given a list of (possible) debian packages
+# given a list of (possible) debian/dirt packages
 # determine if any need to be installed and if so stop and prompt user.
-need_to_install_debian () {
-	debian_need=
+# first arg must be 'debian' or 'dirt'
+# which will use the appropriate functions:
+# 	is_a_${system}_package
+#	is_${system}_package_installed
+need_to_install () {
+	system=$1
+	shift
+
+	need=
 	while [ $# -ge 1 ]; do
-		debian_package_name=$1
-		is_a_debian_package $debian_package_name
+		package_name=$1
+		is_a_${system}_package $package_name
 		if [ 0 -eq $? ]; then
-			is_debian_package_installed $debian_package_name
+			is_${system}_package_installed $package_name
 			if [ 0 -eq $? ]; then
 				# installed
-				#echo "YOU GOT ${debian_package_name}"
+				#echo "YOU GOT ${package_name}"
 				true
 			else
 				# not installed
-				 debian_need="${debian_need} ${debian_package_name}"
+				need="${need} ${package_name}"
 			fi
 		else
 			# some one give a bad package name.
 			# bail out.
-			1>&2 echo "The dirt package references an invalid Debian package: ${debian_package_name}"
+			1>&2 echo "The dirt package references an invalid ${system} package: ${package_name}"
 			exit 4
 		fi
 
 		shift
 	done
 
-	if [ ! -z "$debian_need" ]; then
-		echo 'You need to get some debian packages:'
-		echo "apt-get install $debian_need"
+	if [ ! -z "$need" ]; then
+		echo "You need to get some ${system} packages:"
+		echo "$need"
 		exit 5
 	fi
 }
@@ -196,6 +202,18 @@ is_a_debian_package () {
 # given a single package name, is it installed?
 is_debian_package_installed () {
 	dpkg-query --status $1 > /dev/null 2>&1
+	return $?
+}
+
+# given a single package name, determine if its a real package name or just some letters
+is_a_dirt_package () {
+	package_path="`get_package_path $1`"
+	return $?
+}
+
+# given a single package name, is it installed?
+is_dirt_package_installed () {
+	ls "${DIRT_INSTALL_PATH}/${1}" > /dev/null 2>&1
 	return $?
 }
 
