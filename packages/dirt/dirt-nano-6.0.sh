@@ -21,9 +21,9 @@ list_dependencies_debian () {
 
 # Space delimited list of other dirt packages.
 list_dependencies_dirt () {
-	# in real life nano has nothing to do with hello but
-	# it provides an excellent test of the different dependencies.
-	echo 'hello'
+	1>&2 echo 'in real life nano has nothing to do with hello but'
+	1>&2 echo 'it provides an excellent test of the different dependencies.'
+	echo 'dirt-hello-2.12'
 } 
 
 # Download the source code.  Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).

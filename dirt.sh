@@ -3,13 +3,14 @@
 # shows the commands being executed
 #set -x
 
-DIRT_SCRIPT_FULL_PATH=`realpath "$0"`
-DIRT_LOCATION=`dirname "${DIRT_SCRIPT_FULL_PATH}"`
+DIRT_SCRIPT_FULL_PATH="`realpath "$0"`"
+DIRT_LOCATION="`dirname "${DIRT_SCRIPT_FULL_PATH}"`"
 DIRT_PACKAGES_PATH="${DIRT_LOCATION}/packages"
 
 . "${DIRT_LOCATION}/configuration.sh"
-#echo $DIRT_WORKSPACE_PATH
-#echo $DIRT_INSTALL_PATH
+# Need to make sure these are full paths.
+DIRT_WORKSPACE_PATH="`realpath "$DIRT_WORKSPACE_PATH"`"
+DIRT_INSTALL_PATH="`realpath "$DIRT_INSTALL_PATH"`"
 
 usage () {
 	message='dirt.sh COMMAND PACKAGE'
@@ -78,7 +79,7 @@ command_install () {
 	mkdir -p "${DIRT_WORKSPACE_PATH}/${package_name}"
 	cd "$DIRT_WORKSPACE_PATH"
 
-	#fetch
+	fetch
 
 	#verify
 
