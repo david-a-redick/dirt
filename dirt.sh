@@ -47,7 +47,8 @@ is_function_defined () {
 	function_name="$1"
 
 	# use the builtin 'command' to look up the function name
-	# in, what amounts to, the shells symbol table and print it out.
+	# in, what amounts to, the shell's symbol table and print it out.
+	# https://pubs.opengroup.org/onlinepubs/9699919799/utilities/command.html
 	if [ "$(command -v ${function_name})" = "" ]; then
 		#echo 'not there'
 		return 1
@@ -58,7 +59,39 @@ is_function_defined () {
 }
 
 command_install () {
-	echo 'todo install'
+	package_name=$1
+
+	package_path="`get_package_path $package_name`"
+	if [ 0 -ne $? ]; then
+		echo "No dirt package $package_name"
+		exit 3
+	fi
+	echo $package_path
+	. "$package_path"
+
+	check_local
+
+	echo "Debian deps:" `list_dependencies_debian`
+
+	echo "Dirt deps: " `list_dependencies_dirt`
+
+	fetch
+
+	verify
+
+	extract
+
+	patch
+
+	configure
+
+	build
+
+	test
+
+	install
+
+	check_install
 }
 
 contains () {
@@ -76,10 +109,29 @@ contains () {
 	fi
 }
 
-find_package () {
+# look up a single package
+get_package_path () {
 	package_name="$1"
 
-	find "$DIRT_PACKAGES_PATH" -iname "${package_name}.sh" -print
+	package_group=`get_package_group $package_name`
+
+	package_path="${DIRT_PACKAGES_PATH}/${package_group}/${package_name}.sh"
+	ls "$package_path" > /dev/null 2>&1
+	if [ 0 -eq $? ]; then
+		#echo 'found the package'
+		echo $package_path
+		return 0
+	else
+		#echo 'did not find package'
+		echo ''
+		return 1
+	fi
+}
+
+# Given a correctly syntaxed package name (NAME-VERSION[-FEATURE]) return NAME.
+# This is not the gentoo category.
+get_package_group () {
+	echo ${1%%-*}
 }
 
 command_search () {
