@@ -16,9 +16,9 @@ list_dependencies_dirt () {
 }
 
 fetch () {
-	#git clone https://github.com/notepadqq/notepadqq.git
+	git clone https://github.com/notepadqq/notepadqq.git
 	cd notepadqq
-	#git checkout v1.4.8
+	git checkout v1.4.8
 	true
 }
 
@@ -42,8 +42,6 @@ configure () {
 	local install_prefix="$1"
 
 	./configure --prefix "${install_prefix}"
-
-	#qmake-qt5 PREFIX="${install_prefix}" LRELEASE=/usr/bin/lrelease notepadqq.pro
 }
 
 build () {
