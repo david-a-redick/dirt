@@ -67,7 +67,7 @@ command_install () {
 		1>&2 echo "No dirt package $package_name"
 		exit 3
 	fi
-	echo $package_path
+
 	. "$package_path"
 
 	check_local
