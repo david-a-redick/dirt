@@ -72,6 +72,7 @@ command_install () {
 
 	check_local
 	if [ 0 -ne $? ]; then
+		1>&2 echo 'Your local system is not compatible.'
 		exit 6
 	fi
 
@@ -86,22 +87,58 @@ command_install () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	fetch
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to fetch.'
+		exit 7
+	fi
 
 	verify
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to verify.'
+		exit 8
+	fi
 
 	extract
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to extract.'
+		exit 9
+	fi
 
 	patch
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to patch.'
+		exit 10
+	fi
 
 	configure "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to configure.'
+		exit 11
+	fi
 
 	build "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to build.'
+		exit 12
+	fi
 
 	test "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to test.'
+		exit 13
+	fi
 
 	install "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to install.'
+		exit 14
+	fi
 
 	check_install "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to check_install.'
+		exit 15
+	fi
 }
 
 is_function_defined () {
