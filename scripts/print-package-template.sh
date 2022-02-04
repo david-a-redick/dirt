@@ -40,27 +40,32 @@ patch () {
 
 configure () {
 	# Configure the source codes build setup.
+	install_prefix="$1"
 	return 0
 }
 
 build () {
 	# Compile and otherwise package up for installation or distribution.
+	install_prefix="$1"
 	return 0
 }
 
 test () {
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
+	install_prefix="$1"
 	return 0
 }
 
 install () {
 	# Install the package to the local system.
+	install_prefix="$1"
 	return 0
 }
 
 check_install () {
 	# Any post install checks ands tests.
+	install_prefix="$1"
 	return 0
 }
 

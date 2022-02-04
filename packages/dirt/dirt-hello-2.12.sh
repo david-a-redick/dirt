@@ -7,7 +7,7 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo ""
+	echo "autopoint"
 }
 
 list_dependencies_dirt () {
@@ -17,6 +17,10 @@ list_dependencies_dirt () {
 
 fetch () {
 	git clone https://git.savannah.gnu.org/git/hello.git
+	cd hello
+	git checkout v2.12
+	# this will fetch submodules and do some setup.
+	./bootstrap
 }
 
 verify () {
@@ -35,27 +39,34 @@ patch () {
 }
 
 configure () {
-	# Configure the source codes build setup.
+	install_prefix="$1"
+	echo 'we should still be in the same spot'
+	ls -l
+	./configure --prefix="$install_prefix"
 	return 0
 }
 
 build () {
+	install_prefix="$1"
 	# Compile and otherwise package up for installation or distribution.
 	return 0
 }
 
 test () {
+	install_prefix="$1"
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
 	return 0
 }
 
 install () {
+	install_prefix="$1"
 	# Install the package to the local system.
 	return 0
 }
 
 check_install () {
+	install_prefix="$1"
 	# Any post install checks ands tests.
 	return 0
 }

@@ -76,8 +76,9 @@ command_install () {
 
 	need_to_install dirt `list_dependencies_dirt`
 
-	mkdir -p "${DIRT_WORKSPACE_PATH}/${package_name}"
-	cd "$DIRT_WORKSPACE_PATH"
+	prefix="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${prefix}"
+	cd "${prefix}"
 
 	fetch
 
@@ -87,15 +88,15 @@ command_install () {
 
 	#patch
 
-	#configure
+	configure "${prefix}"
 
-	#build
+	#build "${prefix}"
 
-	#test
+	#test "${prefix}"
 
-	#install
+	#install "${prefix}"
 
-	#check_install
+	#check_install "${prefix}"
 }
 
 is_function_defined () {
