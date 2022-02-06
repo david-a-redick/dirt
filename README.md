@@ -71,7 +71,9 @@ dirt.sh COMMAND PACKAGE
 
 search NAME - will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - will fetch, build and install the given package.
+install PACKAGE_NAME - will run through the entire life cycle of package except for any remove or purge steps.
+
+configure PACKAGE - will only run the configure stage for the given package.
 ```
 
 And to get the real deal:
