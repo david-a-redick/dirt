@@ -6,8 +6,8 @@
 # and patched and compiled.
 # dirt assumes you want to hack and fiddle with the code, so it's left for you.
 # One subdirectory for each package.
-DIRT_WORKSPACE_PATH=$HOME/source/dirt-debian/workspace
+DIRT_WORKSPACE_PATH=$HOME/source/dirt/workspace
 
 # dirt will placed the completed and installed packages here.
 # One subdirectory for each package.
-DIRT_INSTALL_PATH=$HOME/source/dirt-debian/install
+DIRT_INSTALL_PATH=$HOME/source/dirt/install

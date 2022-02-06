@@ -1,18 +1,18 @@
-# What is dirt-debian?
+# What is dirt?
 
-dirt-debian is a dirt simple package manager intended to be run inside an existing debian system, inside a user's home directory.
+dirt is a dirt simple package manager intended to be run inside an existing Debian system, inside a user's home directory.
  
 It is a source based personal package manager that draws inspiration from [FreeBSD's ports](https://www.freshports.org), [archlinux's Arch User Repository]() (AUR), [gentoo's portage](https://packages.gentoo.org) and little from [GoboLinux](https://gobolinux.org).
 
-dirt-debian intended to help create official debian packages and experiment with applications not currently in debian.  When possible official debian packages will be used as the dependencies.  dirt-debian focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
+dirt intended to help create official debian packages and experiment with applications not currently in debian.  When possible official debian packages will be used as the dependencies.  dirt focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
 
-Think of dirt-debian as a [linux-from-scratch](https://www.linuxfromscratch.org/) or gentoo with a very stable core system.  Or even guix but not bothering with providing binaries or repeatable builds.
+Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or gentoo with a very stable core system.
 
-Think of this as pre-Sid.
+Think of this as a place for [pre-WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
 
 # How Does It Work?
 
-dirt-debian is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bourne_shell)) script that follows a life cycle pattern that is a hybred between [port's Makefile](https://docs.freebsd.org/en/books/porters-handbook/order/#porting-order-targets) and [AUR's PKGBUILD](https://wiki.archlinux.org/title/PKGBUILD) file.
+dirt is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bourne_shell)) script that follows a life cycle pattern that is a hybred between [port's Makefile](https://docs.freebsd.org/en/books/porters-handbook/order/#porting-order-targets) and [AUR's PKGBUILD](https://wiki.archlinux.org/title/PKGBUILD) file.
 
 The `packages` directory contains all the package groups and package files.
 
@@ -51,18 +51,18 @@ NOTE: There are no pre or post functions as in ports.
 `purge` - Remove any configuration (dot files) and other files created during run time.
 
 
-# How Do I Use dirt-debian?
+# How Do I Use dirt?
 
 Log into your Debian 11 system and pop open your favorite terminal console.
 
 ```shell
 git clone TODO
 
-cd dirt-debian
+cd dirt
 
 nano configuration.sh
 
-./dirt-debian.sh --help
+./dirt.sh --help
 TODO
 ```
 
