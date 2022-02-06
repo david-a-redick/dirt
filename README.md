@@ -81,3 +81,15 @@ And to get the real deal:
 ```shell
 ./dirt.sh install nano-6.0
 ```
+
+# How To Make A Package
+
+```shell
+$ mkdir packages/FOO
+$ ./scripts/print-package-template.sh > ./packages/FOO/FOO-1.2.3.sh
+$ cd packages-by-category/GENTOO-CATEGORY/
+$ ln -s ../../packages/FOO FOO
+$ cd ../..
+$ nano ./packages/FOO/FOO-1.2.3.sh
+$ ./dirt.sh install FOO-1.2.3
+```
