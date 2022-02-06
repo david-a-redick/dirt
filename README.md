@@ -10,7 +10,7 @@ It is a source based personal package manager that draws inspiration from [FreeB
 
 dirt intended to help create official Debian packages and experiment with applications not currently in Debian.  When possible official Debian packages will be used as the dependencies.  dirt focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
 
-Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or gentoo with a very stable core system.
+Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or AUR with a very stable core system.
 
 Think of this as a place for [WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
 
