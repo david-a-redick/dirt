@@ -1,14 +1,18 @@
+# Status
+
+Alpha but actually does stuff.
+
 # What is dirt?
 
 dirt is a dirt simple package manager intended to be run inside an existing Debian system, inside a user's home directory.
  
-It is a source based personal package manager that draws inspiration from [FreeBSD's ports](https://www.freshports.org), [archlinux's Arch User Repository]() (AUR), [gentoo's portage](https://packages.gentoo.org) and little from [GoboLinux](https://gobolinux.org).
+It is a source based personal package manager that draws inspiration from [FreeBSD's ports](https://www.freshports.org), [archlinux's Arch User Repository](https://aur.archlinux.org/packages) (AUR), [gentoo's portage](https://packages.gentoo.org) and little from [GoboLinux](https://gobolinux.org).
 
-dirt intended to help create official debian packages and experiment with applications not currently in debian.  When possible official debian packages will be used as the dependencies.  dirt focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
+dirt intended to help create official Debian packages and experiment with applications not currently in Debian.  When possible official Debian packages will be used as the dependencies.  dirt focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
 
 Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or gentoo with a very stable core system.
 
-Think of this as a place for [pre-WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
+Think of this as a place for [WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
 
 # How Does It Work?
 
