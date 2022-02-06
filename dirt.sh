@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Copyright 2020 - David A. Redick
+#
 # This file is part of dirt.
 #
 # dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -30,7 +32,11 @@ usage () {
 }
 
 help () {
-	echo 'todo help'
+	printf '
+search NAME - will search for any hits on the given NAME in both package files and group directories.
+
+install PACKAGE_NAME - will fetch, build and install the given package.
+'
 }
 
 main () {
