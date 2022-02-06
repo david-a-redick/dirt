@@ -7,19 +7,19 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo "qttools5-dev-tools libqt5webkit5 libqt5webkit5-dev libqt5svg5 libqt5svg5-dev"
+	echo "libgtkmm-2.4-dev"
 }
 
 list_dependencies_dirt () {
 	# Space delimited list of other dirt packages.
-	echo ""
+	echo "gconfmm-2.28.3"
 }
 
 fetch () {
-	git clone https://github.com/notepadqq/notepadqq.git
-	cd notepadqq
-	git checkout v1.4.8
-	true
+	# Download the source code.
+	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+	wget https://ccdw.org/~cjj/prog/ccgo/src/ccgo-0.3.6.5.tar.gz
 }
 
 verify () {
@@ -29,7 +29,7 @@ verify () {
 
 extract () {
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	return 0
+	tar -xf ccgo-0.3.6.5.tar.gz
 }
 
 patch () {
@@ -40,14 +40,13 @@ patch () {
 configure () {
 	# Configure the source codes build setup.
 	local install_prefix="$1"
-	cd notepadqq
-	./configure --prefix "${install_prefix}"
+	cd ccgo-0.3.6.5
+	./configure --prefix="$install_prefix"
 }
 
 build () {
 	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	cd notepadqq
+	cd ccgo-0.3.6.5
 	make
 }
 
@@ -61,8 +60,7 @@ test () {
 install () {
 	# Install the package to the local system.
 	local install_prefix="$1"
-	cd notepadqq
-	make install
+	return 0
 }
 
 check_install () {
@@ -73,5 +71,5 @@ check_install () {
 
 purge () {
 	# Remove any configuration (dot files) and other files created during run time.
-	echo 'todo ~/.config/Notepadqq/'
+	return 0
 }

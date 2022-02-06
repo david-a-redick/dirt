@@ -1,4 +1,3 @@
-https://ccdw.org/~cjj/prog/ccgo/
 https://github.com/c00kiemon5ter/monsterwm
 https://archlinux.org/packages/community/any/netbeans/
 https://aur.archlinux.org/packages/openstreetcam-gui

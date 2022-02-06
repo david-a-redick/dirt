@@ -19,7 +19,7 @@ fetch () {
 	git clone https://git.savannah.gnu.org/git/hello.git
 
 	cd hello
-	# script will remain in the WORKSPACE/dirt-hello-2.12/hello directory
+	# script will reset to WORKSPACE (the ..) at each stage.
 
 	git checkout v2.12
 
@@ -44,21 +44,25 @@ patch () {
 
 configure () {
 	local install_prefix="$1"
+	cd hello
 	./configure --prefix="$install_prefix"
 }
 
 build () {
 	local install_prefix="$1"
+	cd hello
 	make
 }
 
 test () {
 	local install_prefix="$1"
+	cd hello
 	make check
 }
 
 install () {
 	local install_prefix="$1"
+	cd hello
 	make install
 }
 

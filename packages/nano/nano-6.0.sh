@@ -15,7 +15,7 @@ fetch () {
 	wget https://www.nano-editor.org/dist/v6/nano-6.0.tar.xz
 }
 
-verify () { 
+verify () {
 	wget https://www.nano-editor.org/dist/v6/nano-6.0.tar.xz.asc
 	echo 'todo'
 }
@@ -29,22 +29,24 @@ patch () {
 }
 
 configure () {
-	cd nano-6.0
 	local install_prefix="$1"
+	cd nano-6.0
 	./configure --prefix="${install_prefix}"
 }
 
 build () {
 	local install_prefix="$1"
+	cd nano-6.0
 	make
 }
 
 test () {
 	return 0
-} 
+}
 
 install () {
 	local install_prefix="$1"
+	cd nano-6.0
 	make install
 }
 

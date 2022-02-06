@@ -35,7 +35,9 @@ help () {
 	printf '
 search NAME - will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - will fetch, build and install the given package.
+install PACKAGE_NAME - will run through the entire life cycle of package except for any remove or purge steps.
+
+configure PACKAGE - will only run the configure stage for the given package.
 '
 }
 
@@ -77,7 +79,7 @@ command_install () {
 	local package_name=$1
 
 	local package_path="`get_package_path $package_name`"
-	if [ 0 -ne $? ]; then
+	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
 	fi
@@ -106,52 +108,84 @@ command_install () {
 		exit 7
 	fi
 
+	cd "${workspace}"
 	verify
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to verify.'
 		exit 8
 	fi
 
+	cd "${workspace}"
 	extract
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to extract.'
 		exit 9
 	fi
 
+	cd "${workspace}"
 	patch
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to patch.'
 		exit 10
 	fi
 
+	cd "${workspace}"
 	configure "${prefix}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to configure.'
 		exit 11
 	fi
 
+	cd "${workspace}"
 	build "${prefix}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to build.'
 		exit 12
 	fi
 
+	cd "${workspace}"
 	test "${prefix}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to test.'
 		exit 13
 	fi
 
+	cd "${workspace}"
 	install "${prefix}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to install.'
 		exit 14
 	fi
 
+	cd "${workspace}"
 	check_install "${prefix}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to check_install.'
 		exit 15
+	fi
+}
+
+command_configure () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	. "$package_path"
+
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${workspace}"
+	cd "${workspace}"
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	configure "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to configure.'
+		exit 11
 	fi
 }
 

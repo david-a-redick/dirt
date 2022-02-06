@@ -7,7 +7,7 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo "qttools5-dev-tools libqt5webkit5 libqt5webkit5-dev libqt5svg5 libqt5svg5-dev"
+	echo "libgconf2-dev"
 }
 
 list_dependencies_dirt () {
@@ -16,10 +16,10 @@ list_dependencies_dirt () {
 }
 
 fetch () {
-	git clone https://github.com/notepadqq/notepadqq.git
-	cd notepadqq
-	git checkout v1.4.8
-	true
+	# Download the source code.
+	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+	wget https://download.gnome.org/sources/gconfmm/2.28/gconfmm-2.28.3.tar.xz
 }
 
 verify () {
@@ -29,6 +29,7 @@ verify () {
 
 extract () {
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+	tar -xf gconfmm-2.28.3.tar.xz
 	return 0
 }
 
@@ -40,15 +41,16 @@ patch () {
 configure () {
 	# Configure the source codes build setup.
 	local install_prefix="$1"
-	cd notepadqq
-	./configure --prefix "${install_prefix}"
+	cd gconfmm-2.28.3
+	./configure --prefix="$install_prefix"
 }
 
 build () {
 	# Compile and otherwise package up for installation or distribution.
 	local install_prefix="$1"
-	cd notepadqq
-	make
+	cd gconfmm-2.28.3
+	make 
+	return 0
 }
 
 test () {
@@ -61,8 +63,9 @@ test () {
 install () {
 	# Install the package to the local system.
 	local install_prefix="$1"
-	cd notepadqq
+	cd gconfmm-2.28.3
 	make install
+	return 0
 }
 
 check_install () {
@@ -73,5 +76,5 @@ check_install () {
 
 purge () {
 	# Remove any configuration (dot files) and other files created during run time.
-	echo 'todo ~/.config/Notepadqq/'
+	return 0
 }
