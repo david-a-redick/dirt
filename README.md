@@ -10,7 +10,7 @@ It is a source based personal package manager that draws inspiration from [FreeB
 
 dirt intended to help create official Debian packages and experiment with applications not currently in Debian.  When possible official Debian packages will be used as the dependencies.  dirt focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
 
-Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or gentoo with a very stable core system.
+Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or AUR with a very stable core system.
 
 Think of this as a place for [WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
 
@@ -60,14 +60,36 @@ NOTE: There are no pre or post functions as in ports.
 Log into your Debian 11 system and pop open your favorite terminal console.
 
 ```shell
-git clone TODO
+git clone https://github.com/david-a-redick/dirt.git
 
 cd dirt
 
 nano configuration.sh
 
 ./dirt.sh --help
-TODO
+dirt.sh COMMAND PACKAGE
+
+search NAME - will search for any hits on the given NAME in both package files and group directories.
+
+install PACKAGE_NAME - will run through the entire life cycle of package except for any remove or purge steps.
+
+configure PACKAGE - will only run the configure stage for the given package.
 ```
 
+And to get the real deal:
 
+```shell
+./dirt.sh install nano-6.0
+```
+
+# How To Make A Package
+
+```shell
+$ mkdir packages/FOO
+$ ./scripts/print-package-template.sh > ./packages/FOO/FOO-1.2.3.sh
+$ cd packages-by-category/GENTOO-CATEGORY/
+$ ln -s ../../packages/FOO FOO
+$ cd ../..
+$ nano ./packages/FOO/FOO-1.2.3.sh
+$ ./dirt.sh install FOO-1.2.3
+```
