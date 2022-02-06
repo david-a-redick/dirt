@@ -60,14 +60,22 @@ NOTE: There are no pre or post functions as in ports.
 Log into your Debian 11 system and pop open your favorite terminal console.
 
 ```shell
-git clone TODO
+git clone https://github.com/david-a-redick/dirt.git
 
 cd dirt
 
 nano configuration.sh
 
 ./dirt.sh --help
-TODO
+dirt.sh COMMAND PACKAGE
+
+search NAME - will search for any hits on the given NAME in both package files and group directories.
+
+install PACKAGE_NAME - will fetch, build and install the given package.
 ```
 
+And to get the real deal:
 
+```shell
+./dirt.sh install nano-6.0
+```
