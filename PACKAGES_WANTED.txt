@@ -1,7 +1,7 @@
 FIX ccgo
 
 https://archlinux.org/packages/community/any/netbeans/
-https://aur.archlinux.org/packages/openstreetcam-gui
+
 
 https://github.com/HouzuoGuo/tiedot
 https://github.com/nwjs/nw.js
