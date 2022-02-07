@@ -1,3 +1,44 @@
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..9dd52c6
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1 @@
++asciiportal
+diff --git a/Makefile.default b/Makefile.default
+index f9b0be2..31d4843 100644
+--- a/Makefile.default
++++ b/Makefile.default
+@@ -125,14 +125,14 @@ distclean:
+ # for an example
+ 
+ install: saveclean
+-	mkdir -p $(DESTDIR)/usr/share/asciiportal
+-	mkdir -p $(DESTDIR)/usr/share/doc/asciiportal
+-	mkdir -p $(DESTDIR)/usr/bin
+-	cp -r media/ maps/ $(DESTDIR)/usr/share/asciiportal/
+-	cp README CHANGELOG $(DESTDIR)/usr/share/doc/asciiportal/
+-	cp $(EXE_NAME) $(DESTDIR)/usr/bin/
+-	chmod 0644 $(DESTDIR)/usr/share/doc/asciiportal/*
+-	chmod 0755 $(DESTDIR)/usr/bin/$(EXE_NAME)
++	mkdir -p $(DESTDIR)/share/asciiportal
++	mkdir -p $(DESTDIR)/share/doc/asciiportal
++	mkdir -p $(DESTDIR)/bin
++	cp -r media/ maps/ $(DESTDIR)/share/asciiportal/
++	cp README CHANGELOG $(DESTDIR)/share/doc/asciiportal/
++	cp $(EXE_NAME) $(DESTDIR)/bin/
++	chmod 0644 $(DESTDIR)/share/doc/asciiportal/*
++	chmod 0755 $(DESTDIR)/bin/$(EXE_NAME)
+ 
+ $(TARBALL_SRC):
+ 	mkdir $(DISTNAME)-src
+@@ -168,4 +168,4 @@ yaml-cpp: yaml-cpp-$(YAML-CPP_VER).tar.gz
+ 	tar xvfz $<
+ 
+ yaml-cpp-$(YAML-CPP_VER).tar.gz:
+-	wget http://yaml-cpp.googlecode.com/files/yaml-cpp-$(YAML-CPP_VER).tar.gz
+\ No newline at end of file
++	wget http://yaml-cpp.googlecode.com/files/yaml-cpp-$(YAML-CPP_VER).tar.gz
 diff --git a/Makefile.linux b/Makefile.linux
 index b9628ca..9380029 100644
 --- a/Makefile.linux

@@ -49,6 +49,7 @@ build () {
 	# Compile and otherwise package up for installation or distribution.
 	local install_prefix="$1"
 	cd ASCIIpOrtal
+	make linux
 }
 
 test () {
@@ -61,6 +62,7 @@ test () {
 install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
+	make DESTDIR="$install_prefix" install
 	return 0
 }
 
