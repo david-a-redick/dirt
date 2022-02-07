@@ -1,0 +1,109 @@
+diff --git a/Makefile.linux b/Makefile.linux
+index b9628ca..9380029 100644
+--- a/Makefile.linux
++++ b/Makefile.linux
+@@ -18,11 +18,11 @@ DISTNAME := $(DISTNAME)-$(PORT)64
+ 
+ # Custom C flags: you may define ('-D') or unset ('-U') macros to get your specific
+ # code to work.
+-CXXFLAGS := $(CXXFLAGS) -I/usr/include/xcurses `sdl-config --cflags` -U__NOSDL__ -U__NOSOUND__ -U__DINGOO__ -U__GP2X__
++CXXFLAGS := $(CXXFLAGS) -I/home/redick/.local/include -I/usr/include/xcurses `sdl-config --cflags` `pkg-config SDL_mixer --cflags` -U__NOSDL__ -U__NOSOUND__ -U__DINGOO__ -U__GP2X__ -O0 -w
+ 
+ # Custom link flags: either dynamic (default) or static linking (see the last form,
+ # 'man ld' for details).
+-LINKFLAGS := $(LINKFLAGS) `sdl-config --libs` -L/usr/lib -l SDL_mixer -l pdcurses
++LINKFLAGS := $(LINKFLAGS) `sdl-config --libs` -L/home/redick/.local/lib -L/usr/lib -l SDL_mixer -l pdcurses
+ 
+ # Additional files to be included in release tarball.
+ #FILES_INCLUDE_DIST := $(FILES_INCLUDE_DIST) custom_readme.txt example.dll foo/bar.xml
+diff --git a/src/ap_draw.cpp b/src/ap_draw.cpp
+index 92a15f0..57c2a5e 100644
+--- a/src/ap_draw.cpp
++++ b/src/ap_draw.cpp
+@@ -45,7 +45,7 @@ using namespace std;
+ #include "pdcsdl.h"
+ #endif
+ 
+-#include <curses.h>
++#include <pdcurses.h>
+ 
+ #ifndef __NOSOUND__
+ #include "ap_sound.h"
+diff --git a/src/ap_draw.h b/src/ap_draw.h
+index 6143566..02a86ec 100644
+--- a/src/ap_draw.h
++++ b/src/ap_draw.h
+@@ -26,7 +26,7 @@
+ #define AP_DRAW_H_INCLUDED
+ 
+ #include <vector>
+-#include <curses.h>
++#include <pdcurses.h>
+ 
+ #include "asciiportal.h"
+ 
+diff --git a/src/ap_input.cpp b/src/ap_input.cpp
+index 177ae45..448706f 100644
+--- a/src/ap_input.cpp
++++ b/src/ap_input.cpp
+@@ -22,7 +22,7 @@
+ // The source links with SDL, PDCurses compiled for SDL rendering (PDCSDL)
+ // and SDL mixer.
+ 
+-#include <curses.h>
++#include <pdcurses.h>
+ #include <cstdlib>
+ #include <iostream>
+ #include <fstream>
+diff --git a/src/ap_pager.h b/src/ap_pager.h
+index 5bc531d..da8a683 100644
+--- a/src/ap_pager.h
++++ b/src/ap_pager.h
+@@ -28,7 +28,7 @@
+ #include <utility>
+ #include <list>
+ #include <string>
+-#include <curses.h>
++#include <pdcurses.h>
+ 
+ #include "asciiportal.h"
+ 
+diff --git a/src/ap_play.cpp b/src/ap_play.cpp
+index 4ebbf56..cbba293 100644
+--- a/src/ap_play.cpp
++++ b/src/ap_play.cpp
+@@ -22,7 +22,7 @@
+ // The source links with SDL, PDCurses compiled for SDL rendering (PDCSDL)
+ // and SDL mixer.
+ 
+-#include <curses.h>
++#include <pdcurses.h>
+ #include <cstdlib>
+ #include <iostream>
+ #include <fstream>
+diff --git a/src/ap_sound.cpp b/src/ap_sound.cpp
+index 814c7ba..ad6548e 100644
+--- a/src/ap_sound.cpp
++++ b/src/ap_sound.cpp
+@@ -24,7 +24,7 @@
+ 
+ #include <string>
+ #include <iostream>
+-#include <curses.h>
++#include <pdcurses.h>
+ 
+ #include "ap_sound.h"
+ 
+diff --git a/src/menu.cpp b/src/menu.cpp
+index 3885b15..5fffc29 100644
+--- a/src/menu.cpp
++++ b/src/menu.cpp
+@@ -22,7 +22,7 @@
+ // The source links with SDL, PDCurses compiled for SDL rendering (PDCSDL)
+ // and SDL mixer.
+ 
+-#include <curses.h>
++#include <pdcurses.h>
+ #include <cstdlib>
+ #include <string>
+ #include <vector>

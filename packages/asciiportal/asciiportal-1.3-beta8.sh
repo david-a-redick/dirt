@@ -7,7 +7,7 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo "libyaml-cpp-dev libsdl1.2-dev"
+	echo "libyaml-cpp-dev libsdl1.2-dev libsdl-mixer1.2-dev"
 }
 
 list_dependencies_dirt () {

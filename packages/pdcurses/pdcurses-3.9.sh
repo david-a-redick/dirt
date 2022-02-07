@@ -7,7 +7,7 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	# The TTF is only needed if you do WIDE=Y
+	# The libsdl-ttf2.0 is only needed if you do WIDE=Y
 	echo "libsdl1.2-dev libsdl-ttf2.0-dev xaw3dg-dev"
 }
 
@@ -44,7 +44,7 @@ configure () {
 	# Configure the source codes build setup.
 	local install_prefix="$1"
 	cd PDCurses/x11
-	./configure --prefix="$1" --enable-widec --with-xaw3d --with-x
+	./configure --prefix="$install_prefix" --enable-widec --with-xaw3d --with-x
 }
 
 build () {
@@ -52,8 +52,8 @@ build () {
 	local install_prefix="$1"
 	cd PDCurses
 
-	# NOTE: even though it looks like X11 and SDL1 are separate you
-	# really need both for the apps to actually run.
+	# NOTE: even though it looks like X11 and SDL1 are separate
+	# It looks like you really need both for the apps to actually run.
 	# redick Assumes the same is true for SDL2 apps.
 	
 	cd x11
@@ -62,6 +62,7 @@ build () {
 
 	cd sdl1
 	WIDE=Y make
+	# need to get this in the Makefile via patch
 	gcc -O2 -Wall -fPIC -DPDC_WIDE -I.. -shared -o pdcurses.so *.o
 }
 
@@ -69,7 +70,9 @@ test () {
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
 	local install_prefix="$1"
-	return 0
+	cd PDCurses/sdl1
+	WIDE=Y make demos
+	echo 'You will have to run: testcurs ozdemo xmas tuidemo firework ptest rain worm sdltest'
 }
 
 install_package () {
@@ -81,8 +84,11 @@ install_package () {
 	make prefix="$install_prefix" install
 	cd ..
 	install -Dm644 curspriv.h "$install_prefix/include/curspriv.h"
+	install -Dm644 pdcurses.h "$install_prefix/include/pdcurses.h"
 
 	install -Dm644 sdl1/pdcsdl.h "$install_prefix/include/pdcsdl.h"
+	# note: to support both SDL 1 and 2 we'll have to rename these to say SDL1 and SDL2
+	install -Dm644 sdl1/pdcurses.a "$install_prefix/lib/libpdcurses.a"
 	install -Dm644 sdl1/pdcurses.so "$install_prefix/lib/libpdcurses.so"
 }
 
