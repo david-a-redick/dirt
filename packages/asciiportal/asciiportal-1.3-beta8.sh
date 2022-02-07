@@ -62,8 +62,8 @@ test () {
 install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
+	cd ASCIIpOrtal
 	make DESTDIR="$install_prefix" install
-	return 0
 }
 
 check_install () {
