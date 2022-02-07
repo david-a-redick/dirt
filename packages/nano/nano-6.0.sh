@@ -24,7 +24,8 @@ extract () {
 	tar -xf nano-6.0.tar.xz
 }
 
-patch () {
+prepare () {
+	# Known as prepare `patch` in ports.
 	return 0
 }
 

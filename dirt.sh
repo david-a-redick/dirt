@@ -43,7 +43,7 @@ configure PACKAGE_NAME - Will only run the configure stage for the given package
 
 build - Will only run the build stage for the given package.
 
-just_install PACKAGE_NAME - Will only run the install stage (nothing else)
+just_install PACKAGE_NAME - Will only run the install_package stage (nothing else)
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 

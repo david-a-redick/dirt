@@ -33,8 +33,8 @@ extract () {
 	tar -xf ccgo-0.3.6.5.tar.gz
 }
 
-patch () {
-	# Known as prepare `prepare` in AUR.
+prepare () {
+	# Known as prepare `patch` in ports.
 	return 0
 }
 

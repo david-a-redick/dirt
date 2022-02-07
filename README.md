@@ -40,7 +40,7 @@ NOTE: There are no pre or post functions as in ports.
 
 `extract` - In the cases of bundled release (zip, etc), this step will unpack the bundle.
 
-`patch` - Known as prepare `prepare` in AUR.
+`prepare` - Known as prepare `patch` in ports.  Had to use this name to prevent collision with the [patch program](https://www.gnu.org/software/diffutils/manual/html_node/Merging-with-patch.html).
 
 `configure` - Configure the source code's build setup.
 
@@ -48,7 +48,7 @@ NOTE: There are no pre or post functions as in ports.
 
 `test` - Run unit tests and perform compilation verification.  Known as `check` in AUR.
 
-`install_package` - Install the package to the local system.
+`install_package` - Install the package to the local system.  Had to add '_package' prefix to prevent collision with the [install program](https://www.gnu.org/software/coreutils/install)
 
 `check_install` - Any post install checks ands tests.
 
@@ -76,7 +76,7 @@ install PACKAGE_NAME - will run through the all the stages from `check_local` to
 
 configure PACKAGE_NAME - will only run the configure stage for the given package.
 
-just_install PACKAGE_NAME - will only run the install stage (nothing else)
+just_install PACKAGE_NAME - will only run the install_package stage (nothing else)
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 

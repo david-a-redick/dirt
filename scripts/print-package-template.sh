@@ -44,8 +44,8 @@ extract () {
 	return 0
 }
 
-patch () {
-	# Known as prepare `prepare` in AUR.
+prepare () {
+	# Known as prepare `patch` in ports.
 	return 0
 }
 
