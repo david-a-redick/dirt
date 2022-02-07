@@ -67,17 +67,20 @@ cd dirt
 nano configuration.sh
 
 ./dirt.sh --help
+$ ./dirt.sh --help
 dirt.sh COMMAND PACKAGE
 
 search NAME - will search for any hits on the given NAME in both package files and group directories.
 
 install PACKAGE_NAME - will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE - will only run the configure stage for the given package.
+configure PACKAGE_NAME - will only run the configure stage for the given package.
 
-hook PACKAGE - Will hook the package into use in the local environment (by default ~/.local).
+just_install PACKAGE_NAME - will only run the install stage (nothing else)
 
-unhook PACKAGE - Will remove all the files done by the `hook` command.
+hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
+
+unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
 ```
 
 Download and compile and bundle it.
@@ -88,9 +91,14 @@ Download and compile and bundle it.
 
 Hook it into the local environment (~/.local or /opt if you're brave).
 
-```
-shell
+```shell
 ./dirt.sh hook nano-6.0
+```
+
+Play, test and when you're done.
+
+```shell
+./dirt.sh unhook nano-6.0
 ```
 
 # How To Make A Package

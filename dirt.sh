@@ -39,11 +39,13 @@ search NAME - will search for any hits on the given NAME in both package files a
 
 install PACKAGE_NAME - will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE - will only run the configure stage for the given package.
+configure PACKAGE_NAME - will only run the configure stage for the given package.
 
-hook PACKAGE - Will hook the package into use in the local environment (by default ~/.local).
+just_install PACKAGE_NAME - will only run the install stage (nothing else)
 
-unhook PACKAGE - Will remove all the file done by the `hook` command.
+hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
+
+unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
 '
 }
 
@@ -188,10 +190,35 @@ command_configure () {
 
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
+	cd "${workspace}"
 	configure "${prefix}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to configure.'
 		exit 11
+	fi
+}
+
+command_just_install () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	. "$package_path"
+
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${workspace}"
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	cd "${workspace}"
+	install "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to install.'
+		exit 14
 	fi
 }
 
