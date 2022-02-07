@@ -60,30 +60,33 @@ NOTE: There are no pre or post functions as in ports.
 Log into your Debian 11 system and pop open your favorite terminal console.
 
 ```shell
-git clone https://github.com/david-a-redick/dirt.git
+$ git clone https://github.com/david-a-redick/dirt.git
 
-cd dirt
+$ cd dirt
 
-nano configuration.sh
+$ nano configuration.sh
 
-./dirt.sh --help
 $ ./dirt.sh --help
 dirt.sh COMMAND PACKAGE
 
-search NAME - will search for any hits on the given NAME in both package files and group directories.
+search NAME - Will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - will run through the all the stages from `check_local` to `check_install`
+install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE_NAME - will only run the configure stage for the given package.
+configure PACKAGE_NAME - Will only run the configure stage for the given package.
 
-just_install PACKAGE_NAME - will only run the install_package stage (nothing else)
+build - Will only run the build stage for the given package.
+
+just_install PACKAGE_NAME - Will only run the install_package stage (nothing else)
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
 unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
+
+clean PACKAGE_NAME - Will unhook, delete the install and workspace directories of the package.
 ```
 
-Download and compile and bundle it.
+Download and compile and bundle an example package.
 
 ```shell
 ./dirt.sh install nano-6.0
