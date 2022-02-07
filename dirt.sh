@@ -16,11 +16,13 @@
 DIRT_SCRIPT_FULL_PATH="`realpath "$0"`"
 DIRT_LOCATION="`dirname "${DIRT_SCRIPT_FULL_PATH}"`"
 DIRT_PACKAGES_PATH="${DIRT_LOCATION}/packages"
+DIRT_SCRIPTS_PATH="${DIRT_LOCATION}/scripts"
 
 . "${DIRT_LOCATION}/configuration.sh"
 # Need to make sure these are full paths.
 DIRT_WORKSPACE_PATH="`realpath "$DIRT_WORKSPACE_PATH"`"
 DIRT_INSTALL_PATH="`realpath "$DIRT_INSTALL_PATH"`"
+DIRT_HOOK_PATH="`realpath "$DIRT_HOOK_PATH"`"
 
 usage () {
 	local message='dirt.sh COMMAND PACKAGE'
@@ -35,9 +37,13 @@ help () {
 	printf '
 search NAME - will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - will run through the entire life cycle of package except for any remove or purge steps.
+install PACKAGE_NAME - will run through the all the stages from `check_local` to `check_install`
 
 configure PACKAGE - will only run the configure stage for the given package.
+
+hook PACKAGE - Will hook the package into use in the local environment (by default ~/.local).
+
+unhook PACKAGE - Will remove all the file done by the `hook` command.
 '
 }
 
@@ -98,10 +104,10 @@ command_install () {
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
 	mkdir -p "${workspace}"
-	cd "${workspace}"
 
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
+	cd "${workspace}"
 	fetch
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to fetch.'
@@ -187,6 +193,38 @@ command_configure () {
 		1>&2 echo 'Failed to configure.'
 		exit 11
 	fi
+}
+
+command_hook () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	cd "$prefix"
+	cp -r * "$DIRT_HOOK_PATH"
+}
+
+command_unhook () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	find "$prefix" -type f -exec "$DIRT_SCRIPTS_PATH/unhook.sh" file "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
+
+	# note: this will hit on the prefix dir itself.
+	find "$prefix" -type d -exec "$DIRT_SCRIPTS_PATH/unhook.sh" dir "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
 }
 
 is_function_defined () {
