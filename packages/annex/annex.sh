@@ -70,15 +70,15 @@ test () {
 install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
-	
-	# if you're using the 7 zip approach then you'll just have 
+
+	# if you're using the 7 zip approach then you'll just have
 	# extract everything.
 
 	# redick is just going to copy the files.
 	# following the same convention as the Debian megaglest-data package.
-	local data_dir="$install_prefix/usr/share/games/annex"
+	local data_dir="$install_prefix/share/games/annex"
 	mkdir -p "$data_dir"
-	
+
 	cd annex
 
 	cp -r servers.ini \
@@ -97,7 +97,7 @@ install_package () {
 check_install () {
 	# Any post install checks ands tests.
 	local install_prefix="$1"
-	megaglest --data-path="$install_prefix/usr/share/games/annex"
+	megaglest --data-path="$install_prefix/share/games/annex"
 }
 
 purge () {
