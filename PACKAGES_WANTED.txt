@@ -1,4 +1,5 @@
-https://github.com/c00kiemon5ter/monsterwm
+FIX ccgo
+
 https://archlinux.org/packages/community/any/netbeans/
 https://aur.archlinux.org/packages/openstreetcam-gui
 

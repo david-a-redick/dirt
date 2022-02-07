@@ -80,10 +80,17 @@ hook PACKAGE - Will hook the package into use in the local environment (by defau
 unhook PACKAGE - Will remove all the files done by the `hook` command.
 ```
 
-And to get the real deal:
+Download and compile and bundle it.
 
 ```shell
 ./dirt.sh install nano-6.0
+```
+
+Hook it into the local environment (~/.local or /opt if you're brave).
+
+```
+shell
+./dirt.sh hook nano-6.0
 ```
 
 # How To Make A Package
