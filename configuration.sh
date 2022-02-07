@@ -13,7 +13,9 @@ DIRT_WORKSPACE_PATH=$HOME/source/dirt/workspace
 DIRT_INSTALL_PATH=$HOME/source/dirt/install
 
 # This is were you want to actually access the package for use.
-# A real install install.
+# A real install-install.
+# Make sure you have $DIRT_HOOK_PATH/bin in your $PATH
+# And $DIRT_HOOK_PATH/lib in $LD_LIBRARY_PATH
 DIRT_HOOK_PATH=$HOME/.local
 
 #DIRT_HOOK_PATH=/opt
