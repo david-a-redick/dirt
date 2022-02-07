@@ -78,13 +78,12 @@ install_package () {
 	cd PDCurses
 	
 	cd x11
-	#make prefix="$install_prefix" install
-	ls -l
+	make prefix="$install_prefix" install
 	cd ..
 	install -Dm644 curspriv.h "$install_prefix/include/curspriv.h"
 
-	install -Dm644 sdl1/pdcsdl.h "$install_prefix/usr/include/pdcsdl.h"
-	install -Dm644 sdl1/pdcurses.so "$install_prefix/usr/lib/libpdcurses.so"
+	install -Dm644 sdl1/pdcsdl.h "$install_prefix/include/pdcsdl.h"
+	install -Dm644 sdl1/pdcurses.so "$install_prefix/lib/libpdcurses.so"
 }
 
 check_install () {

@@ -135,9 +135,9 @@ command_install () {
 	fi
 
 	cd "${workspace}"
-	patch
+	prepare
 	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to patch.'
+		1>&2 echo 'Failed to prepare.'
 		exit 10
 	fi
 
@@ -163,9 +163,9 @@ command_install () {
 	fi
 
 	cd "${workspace}"
-	install "${prefix}"
+	install_package "${prefix}"
 	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to install.'
+		1>&2 echo 'Failed to install_package.'
 		exit 14
 	fi
 
@@ -244,9 +244,9 @@ command_just_install () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	cd "${workspace}"
-	install "${prefix}"
+	install_package "${prefix}"
 	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to install.'
+		1>&2 echo 'Failed to install_package.'
 		exit 14
 	fi
 }
