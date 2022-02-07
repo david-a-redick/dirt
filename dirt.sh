@@ -35,17 +35,21 @@ usage () {
 
 help () {
 	printf '
-search NAME - will search for any hits on the given NAME in both package files and group directories.
+search NAME - Will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - will run through the all the stages from `check_local` to `check_install`
+install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE_NAME - will only run the configure stage for the given package.
+configure PACKAGE_NAME - Will only run the configure stage for the given package.
 
-just_install PACKAGE_NAME - will only run the install stage (nothing else)
+build - Will only run the build stage for the given package.
+
+just_install PACKAGE_NAME - Will only run the install stage (nothing else)
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
 unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
+
+clean PACKAGE_NAME - Will unhook, delete the install and workspace directories of the package.
 '
 }
 
@@ -198,6 +202,31 @@ command_configure () {
 	fi
 }
 
+command_build () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	. "$package_path"
+
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${workspace}"
+	cd "${workspace}"
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	cd "${workspace}"
+	build "${prefix}"
+	if [ 0 -ne $? ]; then
+		1>&2 echo 'Failed to build.'
+		exit 12
+	fi
+}
+
 command_just_install () {
 	local package_name=$1
 
@@ -252,6 +281,26 @@ command_unhook () {
 
 	# note: this will hit on the prefix dir itself.
 	find "$prefix" -type d -exec "$DIRT_SCRIPTS_PATH/unhook.sh" dir "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
+}
+
+command_clean () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	command_unhook $package_name
+
+	rm -rf "$workspace"
+
+	rm -rf "$prefix"
 }
 
 is_function_defined () {

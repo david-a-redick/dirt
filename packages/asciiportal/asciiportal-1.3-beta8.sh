@@ -7,24 +7,21 @@ check_local () {
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo "autopoint gperf texinfo help2man"
+	echo "libyaml-cpp-dev libsdl1.2-dev"
 }
 
 list_dependencies_dirt () {
 	# Space delimited list of other dirt packages.
-	echo ""
+	echo "pdcurses-3.9"
 }
 
 fetch () {
-	git clone https://git.savannah.gnu.org/git/hello.git
-
-	cd hello
-	# script will reset to WORKSPACE (the ..) at each stage.
-
-	git checkout v2.12
-
-	# this will fetch submodules and do some setup.
-	./bootstrap
+	# Download the source code.
+	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+	git clone https://github.com/cymonsgames/ASCIIpOrtal.git
+	cd ASCIIpOrtal
+	git checkout v1.3-beta8
 }
 
 verify () {
@@ -43,32 +40,33 @@ patch () {
 }
 
 configure () {
+	# Configure the source codes build setup.
 	local install_prefix="$1"
-	cd hello
-	./configure --prefix="$install_prefix"
+	return 0
 }
 
 build () {
+	# Compile and otherwise package up for installation or distribution.
 	local install_prefix="$1"
-	cd hello
-	make
+	cd ASCIIpOrtal
 }
 
 test () {
+	# Run unit tests and perform compilation verification.
+	# Known as `check` in AUR.
 	local install_prefix="$1"
-	cd hello
-	make check
+	return 0
 }
 
 install_package () {
+	# Install the package to the local system.
 	local install_prefix="$1"
-	cd hello
-	make install
+	return 0
 }
 
 check_install () {
+	# Any post install checks ands tests.
 	local install_prefix="$1"
-	${install_prefix}/bin/hello
 	return 0
 }
 

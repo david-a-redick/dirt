@@ -56,7 +56,7 @@ test () {
 	exit 6
 }
 
-install () {
+install_package () {
 	echo 'should not reach here'
 	exit 6
 }

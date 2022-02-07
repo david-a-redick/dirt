@@ -57,7 +57,7 @@ test () {
 	local install_prefix="$1"
 }
 
-install () {
+install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
 	cd monsterwm

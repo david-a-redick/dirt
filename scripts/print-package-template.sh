@@ -68,7 +68,7 @@ test () {
 	return 0
 }
 
-install () {
+install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
 	return 0

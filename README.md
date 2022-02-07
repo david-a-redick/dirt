@@ -48,7 +48,7 @@ NOTE: There are no pre or post functions as in ports.
 
 `test` - Run unit tests and perform compilation verification.  Known as `check` in AUR.
 
-`install` - Install the package to the local system.
+`install_package` - Install the package to the local system.
 
 `check_install` - Any post install checks ands tests.
 

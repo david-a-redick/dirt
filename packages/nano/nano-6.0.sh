@@ -44,7 +44,7 @@ test () {
 	return 0
 }
 
-install () {
+install_package () {
 	local install_prefix="$1"
 	cd nano-6.0
 	make install

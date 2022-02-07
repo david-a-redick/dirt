@@ -1,11 +1,15 @@
+See WNPP for the official debian list:
+https://www.debian.org/devel/wnpp/requested
+
+See these for potential packages not on debian's radar:
+https://libregamewiki.org
+
+--
+
 FIX ccgo
 
 https://archlinux.org/packages/community/any/netbeans/
-
-
 https://github.com/HouzuoGuo/tiedot
 https://github.com/nwjs/nw.js
 https://github.com/jakejs/jake
 
-See WNPP for the official debian list:
-https://www.debian.org/devel/wnpp/

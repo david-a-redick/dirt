@@ -61,7 +61,7 @@ test () {
 	return 0
 }
 
-install () {
+install_package () {
 	# Install the package to the local system.
 	echo 'install'
 	return 0
