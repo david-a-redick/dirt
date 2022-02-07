@@ -71,9 +71,13 @@ dirt.sh COMMAND PACKAGE
 
 search NAME - will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - will run through the entire life cycle of package except for any remove or purge steps.
+install PACKAGE_NAME - will run through the all the stages from `check_local` to `check_install`
 
 configure PACKAGE - will only run the configure stage for the given package.
+
+hook PACKAGE - Will hook the package into use in the local environment (by default ~/.local).
+
+unhook PACKAGE - Will remove all the files done by the `hook` command.
 ```
 
 And to get the real deal:
@@ -92,4 +96,17 @@ $ ln -s ../../packages/FOO FOO
 $ cd ../..
 $ nano ./packages/FOO/FOO-1.2.3.sh
 $ ./dirt.sh install FOO-1.2.3
+```
+
+# Tested On
+
+```shell
+$ uname -a
+Linux hydrogen 5.10.0-11-amd64 #1 SMP Debian 5.10.92-1 (2022-01-18) x86_64 GNU/Linux
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Debian
+Description:	Debian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
 ```
