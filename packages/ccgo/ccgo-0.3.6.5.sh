@@ -2,7 +2,8 @@
 check_local () {
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
+	echo "Cant figure out how to find local gconfmm"
+	return 1
 }
 
 list_dependencies_debian () {
