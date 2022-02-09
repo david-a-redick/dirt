@@ -41,7 +41,10 @@ extract () {
 
 prepare () {
 	# Known as prepare `patch` in ports.
-	return 0
+	local install_prefix="$1"
+	local package_dir="$2"
+	cd ASCIIpOrtal
+	git apply "${package_dir}/v1.3-beta8-dirt.patch"
 }
 
 configure () {
@@ -72,15 +75,13 @@ install_package () {
 	local package_dir="$2"
 
 	cd ASCIIpOrtal
-	
-	mkdir -p "$install_prefix/share/pixmaps/"
-	cp pdcicon.bmp "$install_prefix/share/pixmaps/asciiportal.bmp"
-
 	make DESTDIR="$install_prefix" install
 
-	cd ..
+	mkdir -p "$install_prefix/share/pixmaps/"
+	install --mode=644 "${package_dir}/asciiportal.png" "$install_prefix/share/pixmaps"
+
 	mkdir -p "$install_prefix/share/applications"
-	cp "${package_dir}/asciiportal.desktop" "$install_prefix/share/applications"
+	install --mode=644 "${package_dir}/asciiportal.desktop" "$install_prefix/share/applications"
 }
 
 check_install () {
