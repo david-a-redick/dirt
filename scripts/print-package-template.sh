@@ -46,18 +46,22 @@ extract () {
 
 prepare () {
 	# Known as prepare `patch` in ports.
+	local install_prefix="$1"
+	local package_dir="$2"
 	return 0
 }
 
 configure () {
 	# Configure the source codes build setup.
 	local install_prefix="$1"
+	local package_dir="$2"
 	return 0
 }
 
 build () {
 	# Compile and otherwise package up for installation or distribution.
 	local install_prefix="$1"
+	local package_dir="$2"
 	return 0
 }
 
@@ -65,18 +69,21 @@ test () {
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
 	local install_prefix="$1"
+	local package_dir="$2"
 	return 0
 }
 
 install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
+	local package_dir="$2"
 	return 0
 }
 
 check_install () {
 	# Any post install checks ands tests.
 	local install_prefix="$1"
+	local package_dir="$2"
 	return 0
 }
 

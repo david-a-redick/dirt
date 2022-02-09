@@ -22,6 +22,11 @@ fetch () {
 	git clone https://github.com/cymonsgames/ASCIIpOrtal.git
 	cd ASCIIpOrtal
 	git checkout v1.3-beta8
+	git checkout -b v1.3-beta8-dirt
+
+	# Note that the icon image used in AUR.
+	# IS NOT under a CC license and is a direct copy of Valve's copyrighted ascii art.
+	# https://www.deviantart.com/dj-zemar/art/The-Official-Portal-ASCII-Art-176976417
 }
 
 verify () {
@@ -49,7 +54,9 @@ build () {
 	# Compile and otherwise package up for installation or distribution.
 	local install_prefix="$1"
 	cd ASCIIpOrtal
-	make linux
+	# compile with includes and libraries and runtime shared resources
+	# under $HOME/.local or where ever
+	make DESTDIR="$DIRT_HOOK_PATH" linux
 }
 
 test () {
@@ -62,8 +69,18 @@ test () {
 install_package () {
 	# Install the package to the local system.
 	local install_prefix="$1"
+	local package_dir="$2"
+
 	cd ASCIIpOrtal
+	
+	mkdir -p "$install_prefix/share/pixmaps/"
+	cp pdcicon.bmp "$install_prefix/share/pixmaps/asciiportal.bmp"
+
 	make DESTDIR="$install_prefix" install
+
+	cd ..
+	mkdir -p "$install_prefix/share/applications"
+	cp "${package_dir}/asciiportal.desktop" "$install_prefix/share/applications"
 }
 
 check_install () {

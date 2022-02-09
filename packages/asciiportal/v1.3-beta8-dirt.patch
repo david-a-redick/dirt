@@ -40,7 +40,7 @@ index f9b0be2..31d4843 100644
 \ No newline at end of file
 +	wget http://yaml-cpp.googlecode.com/files/yaml-cpp-$(YAML-CPP_VER).tar.gz
 diff --git a/Makefile.linux b/Makefile.linux
-index b9628ca..9380029 100644
+index b9628ca..50b00c3 100644
 --- a/Makefile.linux
 +++ b/Makefile.linux
 @@ -18,11 +18,11 @@ DISTNAME := $(DISTNAME)-$(PORT)64
@@ -48,15 +48,25 @@ index b9628ca..9380029 100644
  # Custom C flags: you may define ('-D') or unset ('-U') macros to get your specific
  # code to work.
 -CXXFLAGS := $(CXXFLAGS) -I/usr/include/xcurses `sdl-config --cflags` -U__NOSDL__ -U__NOSOUND__ -U__DINGOO__ -U__GP2X__
-+CXXFLAGS := $(CXXFLAGS) -I/home/redick/.local/include -I/usr/include/xcurses `sdl-config --cflags` `pkg-config SDL_mixer --cflags` -U__NOSDL__ -U__NOSOUND__ -U__DINGOO__ -U__GP2X__ -O0 -w
++CXXFLAGS := $(CXXFLAGS) -I$(DESTDIR)/include -I/usr/include/xcurses `sdl-config --cflags` `pkg-config SDL_mixer --cflags` -DDESTDIR=$(DESTDIR) -U__NOSDL__ -U__NOSOUND__ -U__DINGOO__ -U__GP2X__ -O0 -w
  
  # Custom link flags: either dynamic (default) or static linking (see the last form,
  # 'man ld' for details).
 -LINKFLAGS := $(LINKFLAGS) `sdl-config --libs` -L/usr/lib -l SDL_mixer -l pdcurses
-+LINKFLAGS := $(LINKFLAGS) `sdl-config --libs` -L/home/redick/.local/lib -L/usr/lib -l SDL_mixer -l pdcurses
++LINKFLAGS := $(LINKFLAGS) `sdl-config --libs` -L$(DESTDIR)/lib -L/usr/lib -l SDL_mixer -l pdcurses
  
  # Additional files to be included in release tarball.
  #FILES_INCLUDE_DIST := $(FILES_INCLUDE_DIST) custom_readme.txt example.dll foo/bar.xml
+@@ -59,6 +59,9 @@ wrong-way:
+ 	@echo "[*] Instead, call the main Makefile with the proper target!"
+ 	@echo "[*] In most cases, a simple 'make' should work though."
+ 
++print-cxxflags:
++	@echo $(CXXFLAGS)
++
+ # Targets called by the main Makefile:
+ $(PORT):
+ 	$(MAKE) -f Makefile.$(PORT) clean execlean
 diff --git a/src/ap_draw.cpp b/src/ap_draw.cpp
 index 92a15f0..57c2a5e 100644
 --- a/src/ap_draw.cpp
@@ -83,6 +93,33 @@ index 6143566..02a86ec 100644
  
  #include "asciiportal.h"
  
+diff --git a/src/ap_filemgr.cpp b/src/ap_filemgr.cpp
+index 6e74cf5..cc26819 100644
+--- a/src/ap_filemgr.cpp
++++ b/src/ap_filemgr.cpp
+@@ -41,6 +41,11 @@ using namespace std;
+ #include "asciiportal.h"
+ #include "ap_filemgr.h"
+ 
++// If compiled with -DDESTDIR=/foo
++// then STRINGIFY(DESTDIR) will expand to "/foo"
++#define STRINGIFY2(X) #X
++#define STRINGIFY(X) STRINGIFY2(X)
++
+ string FileManager::inscreen = "inscreen.txt";
+ string FileManager::credits = "credits.txt";
+ string FileManager::infos = "infos.yaml";
+@@ -129,8 +134,8 @@ FileManager::FileManager() {
+   s = "/";
+ 
+   // Search for a decent basepath for media and maps (on unix)
+-  if (file_exists("/usr/share/asciiportal"))
+-    basepath = "/usr/share/asciiportal";
++  if (file_exists(STRINGIFY(DESTDIR) "/share/asciiportal"))
++    basepath = STRINGIFY(DESTDIR) "/share/asciiportal";
+ #endif
+ 
+   // Look for a user-specific directory to store save data and custom maps
 diff --git a/src/ap_input.cpp b/src/ap_input.cpp
 index 177ae45..448706f 100644
 --- a/src/ap_input.cpp

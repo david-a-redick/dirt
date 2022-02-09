@@ -96,6 +96,8 @@ command_install () {
 		exit 3
 	fi
 
+	local package_dir="`dirname "$package_path"`"
+
 	. "$package_path"
 
 	check_local
@@ -135,42 +137,42 @@ command_install () {
 	fi
 
 	cd "${workspace}"
-	prepare
+	prepare "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to prepare.'
 		exit 10
 	fi
 
 	cd "${workspace}"
-	configure "${prefix}"
+	configure "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to configure.'
 		exit 11
 	fi
 
 	cd "${workspace}"
-	build "${prefix}"
+	build "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to build.'
 		exit 12
 	fi
 
 	cd "${workspace}"
-	test "${prefix}"
+	test "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to test.'
 		exit 13
 	fi
 
 	cd "${workspace}"
-	install_package "${prefix}"
+	install_package "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to install_package.'
 		exit 14
 	fi
 
 	cd "${workspace}"
-	check_install "${prefix}"
+	check_install "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to check_install.'
 		exit 15
@@ -186,6 +188,8 @@ command_configure () {
 		exit 3
 	fi
 
+	local package_dir="`dirname "$package_path"`"
+
 	. "$package_path"
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
@@ -195,7 +199,7 @@ command_configure () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	cd "${workspace}"
-	configure "${prefix}"
+	configure "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to configure.'
 		exit 11
@@ -211,6 +215,8 @@ command_build () {
 		exit 3
 	fi
 
+	local package_dir="`dirname "$package_path"`"
+
 	. "$package_path"
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
@@ -220,7 +226,7 @@ command_build () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	cd "${workspace}"
-	build "${prefix}"
+	build "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to build.'
 		exit 12
@@ -236,6 +242,8 @@ command_just_install () {
 		exit 3
 	fi
 
+	local package_dir="`dirname "$package_path"`"
+
 	. "$package_path"
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
@@ -244,7 +252,7 @@ command_just_install () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	cd "${workspace}"
-	install_package "${prefix}"
+	install_package "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to install_package.'
 		exit 14
