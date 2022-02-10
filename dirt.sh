@@ -98,9 +98,13 @@ command_install () {
 
 	local package_dir="`dirname "$package_path"`"
 
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+	
 	. "$package_path"
 
-	check_local
+	check_local "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Your local system is not compatible.'
 		exit 6
@@ -109,28 +113,25 @@ command_install () {
 	need_to_install debian `list_dependencies_debian`
 
 	need_to_install dirt `list_dependencies_dirt`
-
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	
 	mkdir -p "${workspace}"
 
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-
 	cd "${workspace}"
-	fetch
+	fetch "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to fetch.'
 		exit 7
 	fi
 
 	cd "${workspace}"
-	verify
+	verify "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to verify.'
 		exit 8
 	fi
 
 	cd "${workspace}"
-	extract
+	extract "${prefix}" "${package_dir}"
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to extract.'
 		exit 9

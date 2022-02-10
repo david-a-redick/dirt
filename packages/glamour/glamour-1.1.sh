@@ -1,27 +1,15 @@
-#!/bin/sh
 
-# Copyright 2020 - David A. Redick
-#
-# This file is part of dirt.
-#
-# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-#
-# dirt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License along with dirt. If not, see <https://www.gnu.org/licenses/>. 
-
-printf '
 check_local () {
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
+	echo 'possible copyright voliations with two music files.'
+	echo 'pending resolution'
+	exit 1
 }
 
 list_dependencies_debian () {
 	# Space delimited list of debian packages.
-	echo ""
+	echo "python3-pygame"
 }
 
 list_dependencies_dirt () {
@@ -33,23 +21,19 @@ fetch () {
 	# Download the source code.
 	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
+	wget https://launchpad.net/glamour/trunk/1.1/+download/glamour.tar.gz
 }
 
 verify () {
 	# Perform any check sums or gpg signature verifications.
 	local install_prefix="$1"
 	local package_dir="$2"
-	return 0
+	sha512sum -c "${package_dir}/glamour-1.1.sha512"
 }
 
 extract () {
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
+	tar -xf glamour.tar.gz
 }
 
 prepare () {
@@ -99,4 +83,3 @@ purge () {
 	# Remove any configuration (dot files) and other files created during run time.
 	return 0
 }
-'
