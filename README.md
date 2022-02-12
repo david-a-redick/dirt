@@ -20,7 +20,7 @@ dirt is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bourne_she
 
 The `packages` directory contains all the package groups and package files.
 
-There is also a `packages-by-category` that follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).  This is mostly for humans that want to browse.
+There is also a `packages-by-category-gentoo` that follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).  This is mostly for humans that want to browse.
 
 A package is also just a POSIX sh script following a naming pattern of `NAME-VERSION[-FEATURES].sh`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
 
