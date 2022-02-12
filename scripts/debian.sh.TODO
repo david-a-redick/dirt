@@ -1,0 +1,86 @@
+#!/bin/sh
+
+#apt-get build-essential devscripts debhelper dh-make
+
+user_name=`whoami`
+user_record=`getent passwd $user_name`
+user_gecos_field=`echo "$user_record" | cut -d ':' -f 5`
+user_full_name="$(echo "$user_gecos_field" | cut -d ',' -f 1)"
+
+echo "$user_full_name"
+exit 1
+
+# ASSUMES IN SOURCE DIR
+mkdir -p debian/source
+
+## Debian likes to start at 1
+
+#DEBEMAIL=email for debian dch --create -v X.Y.Z-1 --package PACKAGE_NAME
+#XXXX is the WNPP bug number
+
+echo 'beret (1.2.2-1) UNRELEASED; urgency=medium
+
+  * Initial release. (Closes: #652580)
+
+ -- David A. Redick <david.a.redick@member.fsf.org>  Thu, 10 Feb 2022 22:57:27 -0500
+' > debian/changelog
+
+
+# specifies the "compatibility level" for the debhelper tool. 
+echo '10' > debian/compat
+
+
+echo 'Source: PACKAGE_NAME
+Maintainer: Lars Wirzenius <liw@liw.fi>
+Section: misc
+Priority: optional
+Standards-Version: 4.5.1
+Build-Depends: debhelper (>= 9)
+
+Package: PACKAGE_NAME
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: greet user
+ hithere greets the user, or the world.
+' > debian/control
+
+echo '' > debian/copyright
+
+echo '#!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+# To clean all compiled, generated, and useless files in the build-tree.
+clean:
+
+# To build the source into compiled programs and formatted documents in the build-tree.
+build:
+
+# To build the source into arch-dependent compiled programs in the build-tree.
+build-arch:
+
+# To build the source into arch-independent formatted documents in the build-tree.
+build-indep:
+
+# To install files into a file tree for each binary package under the debian directory.
+# If defined, binary* targets effectively depend on this target. (Optional)
+#install:
+
+# To create all binary packages (effectively a combination of binary-arch and binary-indep targets).
+binary:
+
+# To create arch-dependent (Architecture: any) binary packages in the parent directory.
+binary-arch:
+
+# To create arch-independent (Architecture: all) binary packages in the parent directory.
+binary-indep:
+
+# To obtain the most recent version of the original source package from an upstream archive. (Optional)
+#get-orig-source:
+'> debian/rules
+
+echo '3.0 (quilt)' > debian/source/format
+
+# debuild auto runs lintian
+#debuild -us -uc
+
+dpkg-buildpackage -us -uc
