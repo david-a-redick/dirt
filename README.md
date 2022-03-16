@@ -22,7 +22,7 @@ The `packages` directory contains all the package groups and package files.
 
 There is also a `packages-by-category-gentoo` that follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).  This is mostly for humans that want to browse.
 
-A package is also just a POSIX sh script following a naming pattern of `NAME-VERSION[-FEATURES].sh`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
+A package is just a Makefile following a naming pattern of `NAME-VERSION[-FEATURES].make`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
 
 Each package contains the following functions executed in this order and may contain comments and hints.  You are expected to be able to read the package file and encourage to experiment.
 
@@ -30,9 +30,9 @@ NOTE: There are no pre or post functions as in ports.
 
 `check_local` - A sanity check of the local system.  Good place for things like CPU compatiblity, in case the application has inline assembler.
 
-`list_dependencies_debian` - Space delimited list of debian packages.
+`dependencies_debian` - Will run `sudo apt-get install ...` for all the debian packages.
 
-`list_dependencies_dirt` - Space delimited list of other dirt packages.
+`dependencies_dirt` - Will run `dirt.sh install ...` for all the dirt packages.
 
 `fetch` - Download the source code.  Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 
@@ -108,11 +108,11 @@ Play, test and when you're done.
 
 ```shell
 $ mkdir packages/FOO
-$ ./scripts/print-package-template.sh > ./packages/FOO/FOO-1.2.3.sh
+$ ./scripts/print-package-template.sh > ./packages/FOO/FOO-1.2.3.make
 $ cd packages-by-category/GENTOO-CATEGORY/
 $ ln -s ../../packages/FOO FOO
 $ cd ../..
-$ nano ./packages/FOO/FOO-1.2.3.sh
+$ nano ./packages/FOO/FOO-1.2.3.make
 $ ./dirt.sh install FOO-1.2.3
 ```
 
