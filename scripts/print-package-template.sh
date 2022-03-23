@@ -4,99 +4,70 @@
 #
 # This file is part of dirt.
 #
-# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License.
 #
 # dirt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 #
 # You should have received a copy of the GNU Affero General Public License along with dirt. If not, see <https://www.gnu.org/licenses/>. 
 
-printf '
-check_local () {
+echo "# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
+
+check_local:
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo ""
-}
+dependencies_debian:
+	# Install debian packages.
+	# sudo apt-get install ...
+	true
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+dependencies_dirt:
+	# Install dirt packages
+	true
 
-fetch () {
+fetch:
 	# Download the source code.
 	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	# The working directory will be \$DIRT_WORKSPACE_PATH/\$PACKAGE_NAME/
+	true
 
-verify () {
+verify:
 	# Perform any check sums or gpg signature verifications.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-extract () {
+extract:
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+prepare:
+	# Known as prepare 'patch' in ports.
+	true
 
-configure () {
+configure:
 	# Configure the source codes build setup.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-build () {
+build:
 	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-test () {
+test:
 	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	# Known as 'check' in AUR.
+	true
 
-install_package () {
+install_package:
 	# Install the package to the local system.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-check_install () {
+check_install:
 	# Any post install checks ands tests.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+	true
 
-purge () {
+purge:
 	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
-'
+	true
+"

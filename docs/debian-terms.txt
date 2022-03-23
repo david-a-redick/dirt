@@ -1,0 +1,4 @@
+ITS - Intend To Salvage
+https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#how-to-salvage-a-package
+
+ITA

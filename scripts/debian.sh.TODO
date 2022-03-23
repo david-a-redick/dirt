@@ -13,17 +13,35 @@ exit 1
 # ASSUMES IN SOURCE DIR
 mkdir -p debian/source
 
-## Debian likes to start at 1
+echo 'Source: FOO
+Maintainer: David A. Redick <david.a.redick@member.fsf.org>
+Section: games
+Priority: optional
+Standards-Version: 4.5.1
+Build-Depends: debhelper (>= 13),
+Homepage: https://github.com/david-a-redick/beret
 
-#DEBEMAIL=email for debian dch --create -v X.Y.Z-1 --package PACKAGE_NAME
+Package: FOO
+Architecture: any for code | all for data
+Depends: FOO-data, ${shlibs:Depends}, ${misc:Depends}
+Description: First sentence blurb that starts with no article.
+ Intended with space to continue description. Limit 80 wides.
+ More etc.
+' > debian/control
+
 #XXXX is the WNPP bug number
 
+DATE_STRING=`date -R`
+
+# Debian likes to start at 1
 echo 'beret (1.2.2-1) UNRELEASED; urgency=medium
 
   * Initial release. (Closes: #652580)
 
- -- David A. Redick <david.a.redick@member.fsf.org>  Thu, 10 Feb 2022 22:57:27 -0500
-' > debian/changelog
+ -- David A. Redick <david.a.redick@member.fsf.org>  '
+ > debian/changelog
+
+echo "$DATE_STRING" >> debian/changelog
 
 
 # specifies the "compatibility level" for the debhelper tool. 
@@ -46,6 +64,7 @@ Description: greet user
 
 echo '' > debian/copyright
 
+# https://www.debian.org/doc/manuals/maint-guide/dreq.en.html#rules
 echo '#!/usr/bin/make -f
 #export DH_VERBOSE = 1
 

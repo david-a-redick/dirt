@@ -1,0 +1,43 @@
+From: YaNing Lu <dluyaning@gmail.com>
+To: submit@bugs.debian.org
+Subject: Bug#1007802: Subject: RFS: nvidia-vaapi-driver/0.0.5-1 [ITP] -- VA-API implementation that uses NVDEC as a backend
+Date: Thu, 17 Mar 2022 01:28:00 +0000
+Reply-To: YaNing Lu <dluyaning@gmail.com>, 1007802@bugs.debian.org
+
+Package: sponsorship-requests
+Severity: wishlist
+
+Dear mentors,
+
+I am looking for a sponsor for my package "nvidia-vaapi-driver":
+
+ * Package name    : nvidia-vaapi-driver
+   Version         : 0.0.5-1
+   Upstream Author : Stephen <elfarto@elfarto.com>
+ * URL             : https://github.com/elFarto/nvidia-vaapi-driver
+ * License         : MIT
+ * Vcs             : https://salsa.debian.org/Dami/nvidia-vaapi-driver
+   Section         : video
+
+It builds those binary packages:
+
+  nvidia-vaapi-driver - VA-API implementation that uses NVDEC as a backend
+
+To access further information about this package, please visit the
+following URL:
+
+  https://mentors.debian.net/package/nvidia-vaapi-driver/
+
+Alternatively, one can download the package with dget using this command:
+
+  dget -x https://mentors.debian.net/debian/pool/main/n/nvidia-vaapi-driver/nvidia-vaapi-driver_0.0.5-1.dsc
+
+Changes for the initial release:
+
+ nvidia-vaapi-driver (0.0.5-1) unstable; urgency=medium
+ .
+   * Initial release. (Closes: #1007264)
+
+Regards,
+-- 
+  Lu YaNing

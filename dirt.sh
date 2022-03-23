@@ -4,7 +4,7 @@
 #
 # This file is part of dirt.
 #
-# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3 of the License.
 #
 # dirt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 #
@@ -84,7 +84,7 @@ command_search () {
 	find "$DIRT_PACKAGES_PATH" -type d -iname "*${package_name}*" -print
 
 	echo '\nPackages:'
-	find "$DIRT_PACKAGES_PATH" -type f -iname "*${package_name}*.sh" -print
+	find "$DIRT_PACKAGES_PATH" -type f -iname "*${package_name}*.make" -print
 }
 
 command_install () {
@@ -92,88 +92,79 @@ command_install () {
 
 	local package_path="`get_package_path $package_name`"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
+		1>&2 echo "No dirt package $package_name.  Try specific version."
 		exit 3
 	fi
 
+	# aka group_path
 	local package_dir="`dirname "$package_path"`"
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
 
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-	
-	. "$package_path"
 
-	check_local "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" check_local
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Your local system is not compatible.'
 		exit 6
 	fi
 
-	need_to_install debian `list_dependencies_debian`
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" dependencies_debian
 
-	need_to_install dirt `list_dependencies_dirt`
-	
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" dependencies_dirt
+
 	mkdir -p "${workspace}"
-
 	cd "${workspace}"
-	fetch "${prefix}" "${package_dir}"
+
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" fetch
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to fetch.'
 		exit 7
 	fi
 
-	cd "${workspace}"
-	verify "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" verify
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to verify.'
 		exit 8
 	fi
 
-	cd "${workspace}"
-	extract "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" extract
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to extract.'
 		exit 9
 	fi
 
-	cd "${workspace}"
-	prepare "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" prepare
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to prepare.'
 		exit 10
 	fi
 
-	cd "${workspace}"
-	configure "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" configure
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to configure.'
 		exit 11
 	fi
 
-	cd "${workspace}"
-	build "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" build
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to build.'
 		exit 12
 	fi
 
-	cd "${workspace}"
-	test "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" test
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to test.'
 		exit 13
 	fi
 
-	cd "${workspace}"
-	install_package "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" install_package
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to install_package.'
 		exit 14
 	fi
 
-	cd "${workspace}"
-	check_install "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" check_install
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to check_install.'
 		exit 15
@@ -273,6 +264,9 @@ command_hook () {
 
 	cd "$prefix"
 	cp -r * "$DIRT_HOOK_PATH"
+
+	# we can't run it ourselves so let the user know
+	echo "NOTE: bash users should run 'hash -r' to clear the command path cache."
 }
 
 command_unhook () {
@@ -290,6 +284,9 @@ command_unhook () {
 
 	# note: this will hit on the prefix dir itself.
 	find "$prefix" -type d -exec "$DIRT_SCRIPTS_PATH/unhook.sh" dir "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
+
+	# we can't run it ourselves so let the user know
+	echo "NOTE: bash users should run 'hash -r' to clear the command path cache."
 }
 
 command_clean () {
@@ -348,7 +345,8 @@ get_package_path () {
 
 	local package_group=`get_package_group $package_name`
 
-	local package_path="${DIRT_PACKAGES_PATH}/${package_group}/${package_name}.sh"
+	local package_path="${DIRT_PACKAGES_PATH}/${package_group}/${package_name}.make"
+
 	ls "$package_path" > /dev/null 2>&1
 	if [ 0 -eq $? ]; then
 		#echo 'found the package'

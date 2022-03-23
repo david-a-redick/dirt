@@ -1,0 +1,44 @@
+
+Package: sponsorship-requests
+Severity: normal
+
+Dear mentors,
+
+I am looking for a sponsor for my package "mailgraph":
+
+   Package name    : mailgraph
+   Version         : 1.14-19
+   Upstream Author : David Schweikert <david@schweikert.ch>
+   URL             : https://mailgraph.schweikert.ch
+   License         : GPL-2
+   Vcs             : https://jff.email/cgit/mailgraph.git
+   Section         : admin
+
+It builds those binary packages:
+
+  mailgraph - RRDtool frontend for Mail statistics
+
+To access further information about this package, please visit the
+following URL:
+
+  https://mentors.debian.net/package/mailgraph/
+
+Alternatively, one can download the package with dget using this
+command:
+
+  dget -x https://mentors.debian.net/debian/pool/main/m/mailgraph/mailgraph_1.14-19.dsc
+
+or from 
+
+ git https://jff.email/cgit/mailgraph.git?h=release%2Fdebian%2F1.14-19
+
+Changes since the last upload:
+
+ mailgraph (1.14-19) unstable; urgency=medium
+ .
+   * Remove debian/patches/110_mailgraph.cgi.patch (Closes: #1003093).
+     Thanks to Vincent Lefevre <vincent@vinc17.net>.
+   * debian/copyright:
+     - Add year 2022 to myself.
+
+

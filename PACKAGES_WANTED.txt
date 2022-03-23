@@ -4,10 +4,27 @@ https://www.debian.org/devel/wnpp/requested
 See these for potential packages not on debian's radar:
 https://libregamewiki.org
 
+https://www.icewalkers.com/linux/software/
+
 --
 
-FIX ccgo
+Some sort of app that will be like wc but can do better selections at the character level.
+and paragraph counts.
+average word length.  average paragraph length.
+character distribution.
+sentences. average sentence length.
 
+
+webfsd
+gource
+ctopy
+GNU mtools
+FIX ccgo
+http://www.qtile.org/
+https://github.com/tailhook/tilenol
+https://sourceforge.net/projects/gbootroot/files/gbootroot/
+http://mindless.sourceforge.net/
+https://gitlab.com/esr/ctopy
 https://archlinux.org/packages/community/any/netbeans/
 https://github.com/HouzuoGuo/tiedot
 https://github.com/nwjs/nw.js
