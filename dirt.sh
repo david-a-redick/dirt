@@ -285,7 +285,9 @@ command_unhook () {
 	find "$prefix" -type l -exec "$DIRT_SCRIPTS_PATH/unhook.sh" file "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
 
 	# note: this will hit on the prefix dir itself.
-	find "$prefix" -type d -exec "$DIRT_SCRIPTS_PATH/unhook.sh" dir "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
+	# make sure we do depth first to clean child dirs before the parents
+	# also, GNU find spits a warning if -depth comes after -type
+	find "$prefix" -depth -type d -exec "$DIRT_SCRIPTS_PATH/unhook.sh" dir "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
 
 	# we can't run it ourselves so let the user know
 	echo "NOTE: bash users should run 'hash -r' to clear the command path cache."
