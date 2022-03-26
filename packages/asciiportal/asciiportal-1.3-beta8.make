@@ -1,21 +1,21 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
+check_local:
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
-}
+	true
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo "libyaml-cpp-dev libsdl1.2-dev libsdl-mixer1.2-dev"
-}
+dependencies_debian:
+	# Install debian packages.
+	sudo apt-get install libyaml-cpp-dev libsdl1.2-dev libsdl-mixer1.2-dev
 
-list_dependencies_dirt () {
+dependencies_dirt:
 	# Space delimited list of other dirt packages.
 	echo "pdcurses-3.9"
-}
 
-fetch () {
+fetch:
 	# Download the source code.
 	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
@@ -27,70 +27,48 @@ fetch () {
 	# Note that the icon image used in AUR.
 	# IS NOT under a CC license and is a direct copy of Valve's copyrighted ascii art.
 	# https://www.deviantart.com/dj-zemar/art/The-Official-Portal-ASCII-Art-176976417
-}
 
-verify () {
+verify:
 	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+	true
 
-extract () {
+extract:
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	return 0
-}
+	true
 
-prepare () {
+prepare:
 	# Known as prepare `patch` in ports.
-	local install_prefix="$1"
-	local package_dir="$2"
-	cd ASCIIpOrtal
-	git apply "${package_dir}/v1.3-beta8-dirt.patch"
+	cd ASCIIpOrtal && git apply "$(PACKAGE_DIR)/v1.3-beta8-dirt.patch"
 }
 
-configure () {
+configure:
 	# Configure the source codes build setup.
-	local install_prefix="$1"
-	return 0
-}
+	true
 
-build () {
+build:
 	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	cd ASCIIpOrtal
-	# compile with includes and libraries and runtime shared resources
+	# we have to define libraries and runtime shared resources
 	# under $HOME/.local or where ever
-	make DESTDIR="$DIRT_HOOK_PATH" linux
-}
+	cd ASCIIpOrtal && make DESTDIR="$(DIRT_HOOK_PATH)" linux
 
-test () {
+test:
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
-	local install_prefix="$1"
-	return 0
-}
+	true
 
-install_package () {
+install_package:
 	# Install the package to the local system.
-	local install_prefix="$1"
-	local package_dir="$2"
+	cd ASCIIpOrtal && make DESTDIR="$(PREFIX)" install
+	mkdir -p "$(PREFIX)/share/pixmaps/"
+	install --mode=644 "$(PACKAGE_DIR)/asciiportal.png" "$(PREFIX)/share/pixmaps"
+	mkdir -p "$(PREFIX)/share/applications"
+	install --mode=644 "$(PACKAGE_DIR)/asciiportal.desktop" "$(PREFIX)/share/applications"
 
-	cd ASCIIpOrtal
-	make DESTDIR="$install_prefix" install
-
-	mkdir -p "$install_prefix/share/pixmaps/"
-	install --mode=644 "${package_dir}/asciiportal.png" "$install_prefix/share/pixmaps"
-
-	mkdir -p "$install_prefix/share/applications"
-	install --mode=644 "${package_dir}/asciiportal.desktop" "$install_prefix/share/applications"
-}
-
-check_install () {
+check_install:
 	# Any post install checks ands tests.
-	local install_prefix="$1"
-	return 0
-}
+	true
 
-purge () {
+purge:
 	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+	true
+

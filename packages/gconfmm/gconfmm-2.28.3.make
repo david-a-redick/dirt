@@ -1,80 +1,56 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
-}
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
+check_local:
+	@true
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo "libgconf2-dev"
-}
+dependencies_debian:
+	sudo apt-get install libgconf2-dev
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+# Space delimited list of other dirt packages.
+dependencies_dirt:
+	@true
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+fetch:
 	wget https://download.gnome.org/sources/gconfmm/2.28/gconfmm-2.28.3.tar.xz
-}
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+verify:
+	@true
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
 	tar -xf gconfmm-2.28.3.tar.xz
-	return 0
-}
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	return 0
-}
+# Known as prepare 'patch' in ports.
+prepare:
+	@true
 
-configure () {
-	# Configure the source codes build setup.
-	local install_prefix="$1"
-	cd gconfmm-2.28.3
-	./configure --prefix="$install_prefix"
-}
+# Configure the source codes build setup.
+configure:
+	cd gconfmm-2.28.3 && ./configure --prefix="$(PREFIX)"
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	cd gconfmm-2.28.3
-	make 
-	return 0
-}
+# Compile and otherwise package up for installation or distribution.
+build:
+	cd gconfmm-2.28.3 && make
+	cd gconfmm-2.28.3/gconf && sed -i -e "s/$(PREFIX)/bob/" gconfmm-2.6.pc
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	return 0
-}
+test:
+	@true
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	cd gconfmm-2.28.3
-	make install
-	return 0
-}
+# Install the package to the local system.
+install_package:
+	cd gconfmm-2.28.3 && make install
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	return 0
-}
+# Any post install checks ands tests.
+check_install:
+	@true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+# Remove any configuration (dot files) and other files created during run time.
+purge:
+	@true

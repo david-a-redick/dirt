@@ -60,6 +60,8 @@ NOTE: There are no pre or post functions as in ports.
 Log into your Debian 11 system and pop open your favorite terminal console.
 
 ```shell
+$ sudo apt-get install git proot
+
 $ git clone https://github.com/david-a-redick/dirt.git
 
 $ cd dirt

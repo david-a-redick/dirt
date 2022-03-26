@@ -1,72 +1,54 @@
 # A package that does nothing but fail at the local sanity check.
 
-check_local () {
-	local distro_name=`lsb_release -s -i`
-	if [ "Debian" = $distro_name ]; then
-		echo 'You have Debian.'
-		return 1
-	else
-		echo 'This is not Debian.'
-		return 1
-	fi
-}
+check_local:
+	@echo 'The install should stop here.'
+	@false
 
-list_dependencies_debian () {
+list_dependencies_debian:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-list_dependencies_dirt () {
+list_dependencies_dirt:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-fetch () {
+fetch:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-verify () {
+verify:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-extract () {
+extract:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-patch () {
+patch:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-configure () {
+configure:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-build () {
+build:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-test () {
+test:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-install_package () {
+install_package:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-check_install () {
+check_install:
 	echo 'should not reach here'
-	exit 6
-}
+	false
 
-purge () {
+purge:
 	echo 'should not reach here'
-	exit 6
-}
+	false
+

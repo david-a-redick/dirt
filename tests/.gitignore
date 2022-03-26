@@ -1,0 +1,2 @@
+# 'make clean' should remove these
+*.test

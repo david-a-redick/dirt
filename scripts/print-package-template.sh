@@ -14,60 +14,60 @@ echo "# These will be defined with proper values at dirt.sh run time.
 PREFIX ?= 'the directory to install the package'
 PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	true
+	@true
 
+# Install debian packages.
+# sudo apt-get install ...
 dependencies_debian:
-	# Install debian packages.
-	# sudo apt-get install ...
-	true
+	@true
 
+# Install dirt packages
 dependencies_dirt:
-	# Install dirt packages
-	true
+	@true
 
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be \$DIRT_WORKSPACE_PATH/\$PACKAGE_NAME/
 fetch:
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be \$DIRT_WORKSPACE_PATH/\$PACKAGE_NAME/
-	true
+	@true
 
+# Perform any check sums or gpg signature verifications.
 verify:
-	# Perform any check sums or gpg signature verifications.
-	true
+	@true
 
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	true
+	@true
 
+# Known as prepare 'patch' in ports.
 prepare:
-	# Known as prepare 'patch' in ports.
-	true
+	@true
 
+# Configure the source codes build setup.
 configure:
-	# Configure the source codes build setup.
-	true
+	@true
 
+# Compile and otherwise package up for installation or distribution.
 build:
-	# Compile and otherwise package up for installation or distribution.
-	true
+	@true
 
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
 test:
-	# Run unit tests and perform compilation verification.
-	# Known as 'check' in AUR.
-	true
+	@true
 
+# Install the package to the local system.
 install_package:
-	# Install the package to the local system.
-	true
+	@true
 
+# Any post install checks ands tests.
 check_install:
-	# Any post install checks ands tests.
-	true
+	@true
 
+# Remove any configuration (dot files) and other files created during run time.
 purge:
-	# Remove any configuration (dot files) and other files created during run time.
-	true
+	@true
 "

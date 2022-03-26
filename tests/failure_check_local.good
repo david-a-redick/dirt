@@ -1,0 +1,3 @@
+The install should stop here.
+make: *** [/home/redick/source/dirt/packages/dirt/dirt-failure_check_local.make:5: check_local] Error 1
+Your local system is not compatible.

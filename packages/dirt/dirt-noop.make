@@ -1,80 +1,59 @@
-# A package that does nothing but print out the various stages.
+# A do nothing package.
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	echo 'check_local'
-	return 0
-}
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
+check_local:
+	@echo 'check_local'
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo ""
-}
+# Install debian packages.
+# sudo apt-get install ...
+dependencies_debian:
+	@echo 'dependencies_debian'
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+# Install dirt packages
+dependencies_dirt:
+	@echo 'dependencies_dirt'
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	echo 'fetch'
-	return 0
-}
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+fetch:
+	@echo 'fetch'
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	echo 'verify'
-	return 0
-}
+# Perform any check sums or gpg signature verifications.
+verify:
+	@echo 'verify'
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	echo 'extract'
-	return 0
-}
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
+	@echo 'extract'
 
-patch () {
-	# Known as prepare `prepare` in AUR.
-	echo 'patch'
-	return 0
-}
+# Known as prepare 'patch' in ports.
+prepare:
+	@echo 'prepare'
 
-configure () {
-	# Configure the source codes build setup.
-	echo 'configure'
-	return 0
-}
+# Configure the source codes build setup.
+configure:
+	@echo 'configure'
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	echo 'build'
-	return 0
-}
+# Compile and otherwise package up for installation or distribution.
+build:
+	@echo 'build'
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	echo 'test'
-	return 0
-}
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
+test:
+	@echo 'test'
 
-install_package () {
-	# Install the package to the local system.
-	echo 'install'
-	return 0
-}
+# Install the package to the local system.
+install_package:
+	@echo 'install_package'
 
-check_install () {
-	# Any post install checks ands tests.
-	echo 'check_install'
-	return 0
-}
+# Any post install checks ands tests.
+check_install:
+	@echo 'check_install'
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	echo 'purge'
-	return 0
-}
+# Remove any configuration (dot files) and other files created during run time.
+purge:
+	@echo 'purge'
+

@@ -1,0 +1,12 @@
+check_local
+dependencies_debian
+dependencies_dirt
+fetch
+verify
+extract
+prepare
+configure
+build
+test
+install_package
+check_install

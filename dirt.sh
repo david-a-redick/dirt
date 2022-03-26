@@ -13,19 +13,19 @@
 # shows the commands being executed
 #set -x
 
-DIRT_SCRIPT_FULL_PATH="`realpath "$0"`"
-DIRT_LOCATION="`dirname "${DIRT_SCRIPT_FULL_PATH}"`"
+DIRT_SCRIPT_FULL_PATH="$(realpath "$0")"
+DIRT_LOCATION="$(dirname "${DIRT_SCRIPT_FULL_PATH}")"
 DIRT_PACKAGES_PATH="${DIRT_LOCATION}/packages"
 DIRT_SCRIPTS_PATH="${DIRT_LOCATION}/scripts"
 
 . "${DIRT_LOCATION}/configuration.sh"
 # Need to make sure these are full paths.
-DIRT_WORKSPACE_PATH="`realpath "$DIRT_WORKSPACE_PATH"`"
-DIRT_INSTALL_PATH="`realpath "$DIRT_INSTALL_PATH"`"
-DIRT_HOOK_PATH="`realpath "$DIRT_HOOK_PATH"`"
+DIRT_WORKSPACE_PATH="$(realpath "$DIRT_WORKSPACE_PATH")"
+DIRT_INSTALL_PATH="$(realpath "$DIRT_INSTALL_PATH")"
+DIRT_HOOK_PATH="$(realpath "$DIRT_HOOK_PATH")"
 
 usage () {
-	local message='dirt.sh COMMAND PACKAGE'
+	local message='dirt.sh COMMAND PACKAGE_NAME'
 	if [ 'err' = "$1" ]; then
 		1>&2 echo "${message}"
 	else
@@ -41,7 +41,7 @@ install PACKAGE_NAME - Will run through the all the stages from `check_local` to
 
 configure PACKAGE_NAME - Will only run the configure stage for the given package.
 
-build - Will only run the build stage for the given package.
+build PACKAGE_NAME - Will only run the build stage for the given package.
 
 just_install PACKAGE_NAME - Will only run the install_package stage (nothing else)
 
@@ -75,6 +75,42 @@ main () {
 		1>&2 echo "Unknown command ${to_run}"
 		exit 2
 	fi
+}
+
+command_proot () {
+	local package_name=$1
+
+	local package_path="`get_package_path $package_name`"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name.  Try specific version."
+		exit 3
+	fi
+
+	local package_dir="$(dirname "$package_path")"
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+
+	proot \
+	--rootfs="${DIRT_LOCATION}/dir-for-proot" \
+	--bind="${package_dir}":/package \
+	--bind="${workspace}":/workspace \
+	--bind="${prefix}":"${DIRT_HOOK_PATH}" \
+	--cwd=/ \
+	--bind=/bin \
+	--bind=/dev \
+	--bind=/etc \
+	--bind=/lib \
+	--bind=/lib32 \
+	--bind=/lib64 \
+	--bind=/libx32 \
+	--bind=/proc \
+	--bind=/run \
+	--bind=/sbin \
+	--bind=/srv \
+	--bind=/sys \
+	--bind=/tmp \
+	--bind=/usr \
+	--bind=/var
 }
 
 command_search () {
@@ -174,15 +210,13 @@ command_install () {
 command_configure () {
 	local package_name=$1
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
 	fi
 
-	local package_dir="`dirname "$package_path"`"
-
-	. "$package_path"
+	local package_dir="$(dirname "$package_path")"
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
 	mkdir -p "${workspace}"
@@ -191,7 +225,7 @@ command_configure () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	cd "${workspace}"
-	configure "${prefix}" "${package_dir}"
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" configure
 	if [ 0 -ne $? ]; then
 		1>&2 echo 'Failed to configure.'
 		exit 11
@@ -201,13 +235,13 @@ command_configure () {
 command_build () {
 	local package_name=$1
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
 	fi
 
-	local package_dir="`dirname "$package_path"`"
+	local package_dir="$(dirname "$package_path")"
 
 	. "$package_path"
 
@@ -228,13 +262,13 @@ command_build () {
 command_just_install () {
 	local package_name=$1
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
 	fi
 
-	local package_dir="`dirname "$package_path"`"
+	local package_dir="$(dirname "$package_path")"
 
 	. "$package_path"
 
@@ -254,7 +288,7 @@ command_just_install () {
 command_hook () {
 	local package_name=$1
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
@@ -272,7 +306,7 @@ command_hook () {
 command_unhook () {
 	local package_name=$1
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
@@ -296,7 +330,7 @@ command_unhook () {
 command_clean () {
 	local package_name=$1
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name"
 		exit 3
@@ -304,13 +338,13 @@ command_clean () {
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
 
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+	local installed_dir="${DIRT_INSTALL_PATH}/${package_name}"
 
 	command_unhook $package_name
 
 	rm -rf "$workspace"
 
-	rm -rf "$prefix"
+	rm -rf "$installed_dir"
 }
 
 is_function_defined () {
@@ -332,7 +366,7 @@ contains () {
 	local string="$1"
 	local substring="$2"
 
-	# basically getting cdr from the substring ( $1=fooAbar $2=A then bar ).
+	# basically getting cdr from the substring ( $1='fooAbar' $2='A' then 'bar' ).
 	# If there are characters missing then we must have the substring in there.
 	if [ "${string#*$substring}" != "$string" ]; then
 		# in
@@ -347,7 +381,7 @@ contains () {
 get_package_path () {
 	local package_name="$1"
 
-	local package_group=`get_package_group $package_name`
+	local package_group=$(get_package_group $package_name)
 
 	local package_path="${DIRT_PACKAGES_PATH}/${package_group}/${package_name}.make"
 
@@ -364,7 +398,7 @@ get_package_path () {
 }
 
 # Given a correctly syntaxed package name (NAME-VERSION[-FEATURE]) return NAME.
-# This is not the gentoo category.
+# This is not the gentoo category nor the debian section.
 get_package_group () {
 	echo ${1%%-*}
 }

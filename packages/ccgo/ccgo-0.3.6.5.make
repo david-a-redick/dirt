@@ -1,76 +1,53 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
+check_local:
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	echo "Cant figure out how to find local gconfmm"
-	return 1
-}
+	@echo "Cant figure out how to find local gconfmm"
+	false
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo "libgtkmm-2.4-dev"
-}
+dependencies_debian:
+	sudo apt-get install libgtkmm-2.4-dev
 
-list_dependencies_dirt () {
+dependencies_dirt:
 	# Space delimited list of other dirt packages.
 	echo "gconfmm-2.28.3"
-}
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+fetch:
 	wget https://ccdw.org/~cjj/prog/ccgo/src/ccgo-0.3.6.5.tar.gz
-}
 
-verify () {
+verify:
 	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+	true
 
-extract () {
+extract:
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 	tar -xf ccgo-0.3.6.5.tar.gz
 }
 
-prepare () {
+prepare:
 	# Known as prepare `patch` in ports.
-	return 0
-}
+	true
 
-configure () {
+configure:
 	# Configure the source codes build setup.
-	local install_prefix="$1"
-	cd ccgo-0.3.6.5
-	./configure --prefix="$install_prefix"
-}
+	cd ccgo-0.3.6.5 && ./configure --prefix="$(PREFIX)"
 
-build () {
+build:
 	# Compile and otherwise package up for installation or distribution.
-	cd ccgo-0.3.6.5
-	make
-}
+	cd ccgo-0.3.6.5 && make
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	return 0
-}
+test:
+	true
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	return 0
-}
+install_package:
+	true
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	return 0
-}
+check_install:
+	true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+purge:
+	true
+

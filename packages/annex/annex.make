@@ -1,82 +1,70 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
+check_local:
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
-}
+	true
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
+list_dependencies_debian:
+	# Install debian packages.
 	# nsis is only needed if you build a Windows installer.
-	echo "megaglest"
-}
+	sudo apt-get install megaglest
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+list_dependencies_dirt:
+	# Install dirt packages
+	true
 
-fetch () {
+fetch:
 	# Download the source code.
 	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 	git clone https://bitbucket.org/annexctw/annex
 	# by default you'll be on the development branch, master is the most stable.
-}
 
-verify () {
+verify:
 	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+	true
 
-extract () {
+extract:
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	return 0
-}
+	true
 
-prepare () {
+prepare:
 	# Known as prepare `patch` in ports.
-	return 0
-}
+	true
 
-configure () {
+configure:
 	# Configure the source codes build setup.
-	local install_prefix="$1"
-	return 0
-}
+	true
 
-build () {
+build:
 	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
 
 	#cd annex/mk_release/linux
 	# makes a directory ../../../annex-release
 	#./make-release.sh --dataonly
 
 	# the above is really bundling everything into 7 zip file.
-	return 0
-}
+	true
 
-test () {
+test:
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
-	local install_prefix="$1"
 
 	#test -f ./annex-release/snapshot/annex-data.7z
+	true
 
-	return 0
-}
-
-install_package () {
+install_package:
 	# Install the package to the local system.
-	local install_prefix="$1"
 
 	# if you're using the 7 zip approach then you'll just have
 	# extract everything.
 
 	# redick is just going to copy the files.
 	# following the same convention as the Debian megaglest-data package.
-	local data_dir="$install_prefix/share/games/annex"
+	data_dir="$(PREFIX)/share/games/annex"
 	mkdir -p "$data_dir"
 
 	cd annex
@@ -94,13 +82,11 @@ install_package () {
 	"$data_dir"
 }
 
-check_install () {
+check_install:
 	# Any post install checks ands tests.
-	local install_prefix="$1"
-	megaglest --data-path="$install_prefix/share/games/annex"
-}
+	megaglest --data-path="$(PREFIX)/share/games/annex"
 
-purge () {
+purge:
 	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+	true
+
