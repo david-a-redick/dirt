@@ -147,9 +147,18 @@ run_stages () {
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
 	mkdir -p "${workspace}"
-	cd "${workspace}"
 
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $@
+	while [ $# -ge 1 ]; do
+		local stage=$1
+		shift
+
+		cd "${workspace}"
+		PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
+		if [ 0 -ne $? ]; then
+			echo "Failed at stage: $stage"
+			exit 6
+		fi
+	done
 }
 
 command_install () {
