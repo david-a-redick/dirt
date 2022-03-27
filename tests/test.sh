@@ -6,13 +6,15 @@ test_return_code () {
 	local message=$3
 
 	if [ $expected -ne $code ]; then
+		echo "Expected: $expected"
+		echo "Got: $code"
 		echo $message
 		exit 1
 	fi
 }
 
 ../dirt.sh install dirt-failure_check_local > failure_check_local.test 2>&1
-test_return_code 6 $? 'failure_check_local run: FAILED'
+test_return_code 2 $? 'failure_check_local run: FAILED'
 diff failure_check_local.test failure_check_local.good > /dev/null 2>&1
 test_return_code 0 $? 'failure_check_local test: FAILED'
 
@@ -30,3 +32,8 @@ test_return_code 0 $? 'noop test: FAILED'
 test_return_code 0 $? 'search run: FAILED'
 diff search.test search.good > /dev/null 2>&1
 test_return_code 0 $? 'search test: FAILED'
+
+../dirt.sh stage dirt-noop fetch > stage-fetch.test 2>&1
+test_return_code 0 $? 'stage-fetch run: FAILED'
+diff stage-fetch.test stage-fetch.good > /dev/null 2>&1
+test_return_code 0 $? 'stage-fetch test: FAILED'

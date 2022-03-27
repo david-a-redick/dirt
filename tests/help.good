@@ -1,14 +1,12 @@
-dirt.sh COMMAND PACKAGE
+dirt.sh COMMAND PACKAGE_NAME
 
 search NAME - Will search for any hits on the given NAME in both package files and group directories.
 
 install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE_NAME - Will only run the configure stage for the given package.
+stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
-build - Will only run the build stage for the given package.
-
-just_install PACKAGE_NAME - Will only run the install_package stage (nothing else)
+proot PACKAGE_NAME - Will create a proot environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 

@@ -26,6 +26,10 @@ DIRT_HOOK_PATH="$(realpath "$DIRT_HOOK_PATH")"
 
 usage () {
 	local message='dirt.sh COMMAND PACKAGE_NAME'
+	if [ -n "$2" ]; then
+		message=$2
+	fi
+
 	if [ 'err' = "$1" ]; then
 		1>&2 echo "${message}"
 	else
@@ -39,11 +43,9 @@ search NAME - Will search for any hits on the given NAME in both package files a
 
 install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE_NAME - Will only run the configure stage for the given package.
+stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
-build PACKAGE_NAME - Will only run the build stage for the given package.
-
-just_install PACKAGE_NAME - Will only run the install_package stage (nothing else)
+proot PACKAGE_NAME - Will create a proot environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
@@ -58,19 +60,23 @@ main () {
 		usage
 		help
 		exit 0
-	elif [ 2 -ne $# ]; then
+	elif [ 'stage' = "$1" ] && [ 3 -ne $# ]; then
+		usage err 'dirt.sh stage PACKAGE_NAME STAGE_NAME'
+		exit 1
+	elif [ 'stage' != "$1" ] && [ 2 -ne $# ]; then
 		usage err
 		exit 1
 	fi
 
 	local to_run=$1
 	local package=$2
+	local stage=$3
 
 	# any function starting with 'command_' is consider to be availible from the cmd line
 	local target="command_${to_run}"
 	is_function_defined $target
 	if [ 0 -eq $? ]; then
-		$target $package
+		$target $package $stage
 	else
 		1>&2 echo "Unknown command ${to_run}"
 		exit 2
@@ -123,166 +129,52 @@ command_search () {
 	find "$DIRT_PACKAGES_PATH" -type f -iname "*${package_name}*.make" -print
 }
 
-command_install () {
-	local package_name=$1
+run_stages () {
+	local package_name="$1"
+	shift
 
-	local package_path="`get_package_path $package_name`"
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name.  Try specific version."
 		exit 3
 	fi
 
 	# aka group_path
-	local package_dir="`dirname "$package_path"`"
-
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" check_local
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Your local system is not compatible.'
-		exit 6
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" dependencies_debian
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" dependencies_dirt
-
-	mkdir -p "${workspace}"
-	cd "${workspace}"
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" fetch
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to fetch.'
-		exit 7
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" verify
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to verify.'
-		exit 8
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" extract
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to extract.'
-		exit 9
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" prepare
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to prepare.'
-		exit 10
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" configure
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to configure.'
-		exit 11
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" build
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to build.'
-		exit 12
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" test
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to test.'
-		exit 13
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" install_package
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to install_package.'
-		exit 14
-	fi
-
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" check_install
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to check_install.'
-		exit 15
-	fi
-}
-
-command_configure () {
-	local package_name=$1
-
-	local package_path="$(get_package_path $package_name)"
-	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
-		exit 3
-	fi
-
 	local package_dir="$(dirname "$package_path")"
 
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-	mkdir -p "${workspace}"
-	cd "${workspace}"
 
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
+	mkdir -p "${workspace}"
 	cd "${workspace}"
-	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" configure
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to configure.'
-		exit 11
-	fi
+
+	PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $@
 }
 
-command_build () {
+command_install () {
 	local package_name=$1
 
-	local package_path="$(get_package_path $package_name)"
-	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
-		exit 3
-	fi
-
-	local package_dir="$(dirname "$package_path")"
-
-	. "$package_path"
-
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-	mkdir -p "${workspace}"
-	cd "${workspace}"
-
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-
-	cd "${workspace}"
-	build "${prefix}" "${package_dir}"
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to build.'
-		exit 12
-	fi
+	run_stages $package_name \
+	check_local \
+	dependencies_debian \
+	dependencies_dirt \
+	fetch \
+	verify \
+	extract \
+	prepare \
+	configure \
+	build \
+	test \
+	install_package \
+	check_install
 }
 
-command_just_install () {
+command_stage () {
 	local package_name=$1
+	local stage=$2
 
-	local package_path="$(get_package_path $package_name)"
-	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
-		exit 3
-	fi
-
-	local package_dir="$(dirname "$package_path")"
-
-	. "$package_path"
-
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-	mkdir -p "${workspace}"
-
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-
-	cd "${workspace}"
-	install_package "${prefix}" "${package_dir}"
-	if [ 0 -ne $? ]; then
-		1>&2 echo 'Failed to install_package.'
-		exit 14
-	fi
+	run_stages $package_name $stage
 }
 
 command_hook () {
