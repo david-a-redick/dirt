@@ -22,7 +22,8 @@ DIRT_SCRIPTS_PATH="${DIRT_LOCATION}/scripts"
 # Need to make sure these are full paths.
 DIRT_WORKSPACE_PATH="$(realpath "$DIRT_WORKSPACE_PATH")"
 DIRT_INSTALL_PATH="$(realpath "$DIRT_INSTALL_PATH")"
-DIRT_HOOK_PATH="$(realpath "$DIRT_HOOK_PATH")"
+# the run_stages.sh needs this to be exported.
+export DIRT_HOOK_PATH="$(realpath "$DIRT_HOOK_PATH")"
 
 usage () {
 	local message='dirt.sh COMMAND PACKAGE_NAME'
@@ -85,8 +86,14 @@ main () {
 
 command_proot () {
 	local package_name=$1
+	run_proot $package_name
+}
 
-	local package_path="`get_package_path $package_name`"
+run_proot () {
+	local package_name=$1
+	local command=$2
+
+	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
 		1>&2 echo "No dirt package $package_name.  Try specific version."
 		exit 3
@@ -96,11 +103,16 @@ command_proot () {
 	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
 	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
+	mkdir -p "${prefix}"
+	mkdir -p "${workspace}"
+	mkdir -p "${DIRT_HOOK_PATH}"
+
 	proot \
 	--rootfs="${DIRT_LOCATION}/dir-for-proot" \
 	--bind="${package_dir}":/package \
 	--bind="${workspace}":/workspace \
 	--bind="${prefix}":"${DIRT_HOOK_PATH}" \
+	--bind="${DIRT_LOCATION}/scripts":/scripts \
 	--cwd=/ \
 	--bind=/bin \
 	--bind=/dev \
@@ -116,7 +128,8 @@ command_proot () {
 	--bind=/sys \
 	--bind=/tmp \
 	--bind=/usr \
-	--bind=/var
+	--bind=/var \
+	$command
 }
 
 command_search () {
@@ -129,61 +142,16 @@ command_search () {
 	find "$DIRT_PACKAGES_PATH" -type f -iname "*${package_name}*.make" -print
 }
 
-run_stages () {
-	local package_name="$1"
-	shift
-
-	local package_path="$(get_package_path $package_name)"
-	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name.  Try specific version."
-		exit 3
-	fi
-
-	# aka group_path
-	local package_dir="$(dirname "$package_path")"
-
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
-
-	mkdir -p "${workspace}"
-
-	while [ $# -ge 1 ]; do
-		local stage=$1
-		shift
-
-		cd "${workspace}"
-		PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
-		if [ 0 -ne $? ]; then
-			echo "Failed at stage: $stage"
-			exit 6
-		fi
-	done
-}
-
 command_install () {
 	local package_name=$1
 
-	run_stages $package_name \
-	check_local \
-	dependencies_debian \
-	dependencies_dirt \
-	fetch \
-	verify \
-	extract \
-	prepare \
-	configure \
-	build \
-	test \
-	install_package \
-	check_install
+	run_proot $package_name "/scripts/run_stages.sh ${package_name}"
 }
 
 command_stage () {
 	local package_name=$1
 	local stage=$2
-
-	run_stages $package_name $stage
+	run_proot $package_name "/scripts/run_stages.sh ${package_name} ${stage}"
 }
 
 command_hook () {
@@ -359,7 +327,7 @@ is_debian_package_installed () {
 
 # given a single package name, determine if its a real package name or just some letters
 is_a_dirt_package () {
-	local package_path="`get_package_path $1`"
+	local package_path="$(get_package_path $1)"
 	return $?
 }
 

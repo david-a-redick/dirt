@@ -1,5 +1,15 @@
 #!/bin/sh
 
+# Copyright 2020 - David A. Redick
+#
+# This file is part of dirt.
+#
+# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3 of the License.
+#
+# dirt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License along with dirt. If not, see <https://www.gnu.org/licenses/>. 
+
 test_return_code () {
 	local expected=$1
 	local code=$2
@@ -14,7 +24,7 @@ test_return_code () {
 }
 
 ../dirt.sh install dirt-failure_check_local > failure_check_local.test 2>&1
-test_return_code 2 $? 'failure_check_local run: FAILED'
+test_return_code 6 $? 'failure_check_local run: FAILED'
 diff failure_check_local.test failure_check_local.good > /dev/null 2>&1
 test_return_code 0 $? 'failure_check_local test: FAILED'
 
@@ -37,3 +47,5 @@ test_return_code 0 $? 'search test: FAILED'
 test_return_code 0 $? 'stage-fetch run: FAILED'
 diff stage-fetch.test stage-fetch.good > /dev/null 2>&1
 test_return_code 0 $? 'stage-fetch test: FAILED'
+
+rm *.test

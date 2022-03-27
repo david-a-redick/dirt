@@ -4,11 +4,11 @@ check_local:
 	@echo 'The install should stop here.'
 	@false
 
-list_dependencies_debian:
+dependencies_debian:
 	echo 'should not reach here'
 	false
 
-list_dependencies_dirt:
+dependencies_dirt:
 	echo 'should not reach here'
 	false
 

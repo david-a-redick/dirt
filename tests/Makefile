@@ -7,5 +7,6 @@ test:
 clean:
 	@rm -f *.test
 
+# This give different results than just running it from a shell
 run:
 	@./test.sh
