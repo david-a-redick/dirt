@@ -10,8 +10,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License along with dirt. If not, see <https://www.gnu.org/licenses/>. 
 
-# shows the commands being executed
-#set -x
+# if DIRT_DEBUG is set (to any value) then show the commands being executed
+# and print to stderr ">>>FUNCTION_NAME $@" at function entry.
+# You can set this via command line at exec time.
+# $ DIRT_DEBUG=1 ./dirt.sh CMD PGK
+if [ "$DIRT_DEBUG" ]; then
+	export DIRT_DEBUG
+	# print commands with prefix '+'
+	set -x
+fi
+
 
 DIRT_SCRIPT_FULL_PATH="$(realpath "$0")"
 DIRT_LOCATION="$(dirname "${DIRT_SCRIPT_FULL_PATH}")"
@@ -26,6 +34,10 @@ DIRT_INSTALL_PATH="$(realpath "$DIRT_INSTALL_PATH")"
 export DIRT_HOOK_PATH="$(realpath "$DIRT_HOOK_PATH")"
 
 usage () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>usage $@"
+	fi
+
 	local message='dirt.sh COMMAND PACKAGE_NAME'
 	if [ -n "$2" ]; then
 		message=$2
@@ -39,6 +51,10 @@ usage () {
 }
 
 help () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>help $@"
+	fi
+
 	printf '
 search NAME - Will search for any hits on the given NAME in both package files and group directories.
 
@@ -57,6 +73,10 @@ clean PACKAGE_NAME - Will unhook, delete the install and workspace directories o
 }
 
 main () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>main $@"
+	fi
+
 	if [ '--help' = "$1" ]; then
 		usage
 		help
@@ -85,13 +105,22 @@ main () {
 }
 
 command_proot () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_proot $@"
+	fi
+
 	local package_name=$1
 	run_proot $package_name
 }
 
 run_proot () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>run_proot $@"
+	fi
+
 	local package_name=$1
-	local command=$2
+	# the shell command to run when we drop into proot. (optional)
+	local shell_command=$2
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
@@ -100,11 +129,14 @@ run_proot () {
 	fi
 
 	local package_dir="$(dirname "$package_path")"
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
 
-	mkdir -p "${prefix}"
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
 	mkdir -p "${workspace}"
+
+	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
+	mkdir -p "${prefix}"
+
+
 	mkdir -p "${DIRT_HOOK_PATH}"
 
 	proot \
@@ -129,10 +161,14 @@ run_proot () {
 	--bind=/tmp \
 	--bind=/usr \
 	--bind=/var \
-	$command
+	$shell_command
 }
 
 command_search () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_search $@"
+	fi
+
 	local package_name="$1"
 
 	echo 'Package Groups:'
@@ -143,18 +179,36 @@ command_search () {
 }
 
 command_install () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_install $@"
+	fi
+
 	local package_name=$1
 
+	run_stages $package_name 'check_local' 'dependencies_debian' 'dependencies_dirt'
 	run_proot $package_name "/scripts/run_stages.sh ${package_name}"
 }
 
 command_stage () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_stage $@"
+	fi
+
 	local package_name=$1
 	local stage=$2
-	run_proot $package_name "/scripts/run_stages.sh ${package_name} ${stage}"
+
+	if [ 'check_local' = "$stage" ] || [ 'dependencies_debian' = "$stage" ] || [ 'dependencies_dirt' = "$stage" ]; then
+		run_stages $package_name $stage
+	else
+		run_proot $package_name "/scripts/run_stages.sh ${package_name} ${stage}"
+	fi
 }
 
 command_hook () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_hook $@"
+	fi
+
 	local package_name=$1
 
 	local package_path="$(get_package_path $package_name)"
@@ -163,7 +217,7 @@ command_hook () {
 		exit 3
 	fi
 
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
 
 	cd "$prefix"
 	cp -r * "$DIRT_HOOK_PATH"
@@ -173,6 +227,10 @@ command_hook () {
 }
 
 command_unhook () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_unhook $@"
+	fi
+
 	local package_name=$1
 
 	local package_path="$(get_package_path $package_name)"
@@ -181,7 +239,7 @@ command_unhook () {
 		exit 3
 	fi
 
-	local prefix="$DIRT_INSTALL_PATH/${package_name}"
+	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
 
 	find "$prefix" -type f -exec "$DIRT_SCRIPTS_PATH/unhook.sh" file "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
 
@@ -197,6 +255,10 @@ command_unhook () {
 }
 
 command_clean () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_clean $@"
+	fi
+
 	local package_name=$1
 
 	local package_path="$(get_package_path $package_name)"
@@ -217,6 +279,10 @@ command_clean () {
 }
 
 is_function_defined () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>is_function_defined $@"
+	fi
+
 	local function_name="$1"
 
 	# use the builtin 'command' to look up the function name
@@ -232,6 +298,10 @@ is_function_defined () {
 }
 
 contains () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>contains $@"
+	fi
+
 	local string="$1"
 	local substring="$2"
 
@@ -248,6 +318,10 @@ contains () {
 
 # look up a single package
 get_package_path () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>get_package_path $@"
+	fi
+
 	local package_name="$1"
 
 	local package_group=$(get_package_group $package_name)
@@ -269,6 +343,10 @@ get_package_path () {
 # Given a correctly syntaxed package name (NAME-VERSION[-FEATURE]) return NAME.
 # This is not the gentoo category nor the debian section.
 get_package_group () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>get_package_group $@"
+	fi
+
 	echo ${1%%-*}
 }
 
@@ -279,6 +357,10 @@ get_package_group () {
 # 	is_a_${system}_package
 #	is_${system}_package_installed
 need_to_install () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>need_to_install $@"
+	fi
+
 	local system=$1
 	shift
 
@@ -315,26 +397,79 @@ need_to_install () {
 
 # given a single package name, determine if its a real package name or just some letters
 is_a_debian_package () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>is_a_debian_package $@"
+	fi
+
 	apt-cache show $1 > /dev/null 2>&1
 	return $?
 }
 
 # given a single package name, is it installed?
 is_debian_package_installed () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>is_debian_package_installed $@"
+	fi
+
 	dpkg-query --status $1 > /dev/null 2>&1
 	return $?
 }
 
 # given a single package name, determine if its a real package name or just some letters
 is_a_dirt_package () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>is_a_dirt_package $@"
+	fi
+
 	local package_path="$(get_package_path $1)"
 	return $?
 }
 
 # given a single package name, is it installed?
 is_dirt_package_installed () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>is_dirt_package_installed $@"
+	fi
+
 	ls "${DIRT_INSTALL_PATH}/${1}" > /dev/null 2>&1
 	return $?
+}
+
+# runs stages outside of proot
+run_stages () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>run_stages $@"
+	fi
+
+	local package_name="$1"
+	shift
+	# remaining args should be the stages, at least one.
+
+	local package_path="$(get_package_path $package_name)"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name"
+		exit 3
+	fi
+
+	local package_dir="$(dirname "$package_path")"
+
+	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
+	mkdir -p "${prefix}"
+
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${workspace}"
+
+	while [ $# -ge 1 ]; do
+		local stage=$1
+		shift
+
+		cd "${workspace}"
+		PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
+		if [ 0 -ne $? ]; then
+			echo "Failed at stage: $stage"
+			exit 6
+		fi
+	done
 }
 
 main $@

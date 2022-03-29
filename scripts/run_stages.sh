@@ -31,9 +31,6 @@ run_all () {
 
 	run_stages \
 	$package_name \
-	check_local \
-	dependencies_debian \
-	dependencies_dirt \
 	fetch \
 	verify \
 	extract \

@@ -24,7 +24,7 @@ There is also a `packages-by-category-gentoo` that follows the [hierarchy of gen
 
 A package is just a Makefile following a naming pattern of `NAME-VERSION[-FEATURES].make`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
 
-Each package contains the following functions executed in this order and may contain comments and hints.  You are expected to be able to read the package file and encourage to experiment.
+Each package contains the following make targets executed in this order and may contain comments and hints.  You are expected to be able to read the package file and encourage to experiment.
 
 NOTE: There are no pre or post functions as in ports.
 
@@ -69,17 +69,15 @@ $ cd dirt
 $ nano configuration.sh
 
 $ ./dirt.sh --help
-dirt.sh COMMAND PACKAGE
+dirt.sh COMMAND PACKAGE_NAME
 
 search NAME - Will search for any hits on the given NAME in both package files and group directories.
 
 install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
 
-configure PACKAGE_NAME - Will only run the configure stage for the given package.
+stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
-build - Will only run the build stage for the given package.
-
-just_install PACKAGE_NAME - Will only run the install_package stage (nothing else)
+proot PACKAGE_NAME - Will create a proot environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
