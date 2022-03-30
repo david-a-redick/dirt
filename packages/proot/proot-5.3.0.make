@@ -60,3 +60,4 @@ check_install:
 # Remove any configuration (dot files) and other files created during run time.
 purge:
 	@true
+
