@@ -1,4 +1,20 @@
-ITS - Intend To Salvage
-https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#how-to-salvage-a-package
 
-ITA
+https://mentors.debian.net/intro-maintainers/
+
+# Common Terms
+
+ITA - Intend To Adopt
+
+ITP - Intend To Package
+
+ITS - [Intend To Salvage](https://www.debian.org/doc/manuals/developers-reference/pkgs.en.html#how-to-salvage-a-package)
+
+O or OP - Orphaned Package
+
+RFA - Request For Adopter
+
+RFH - Request For Help
+
+RFP - Request For Package
+
+WNPP - [Work-Needing and Prospective Packages](https://www.debian.org/devel/wnpp/)
