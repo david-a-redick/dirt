@@ -14,6 +14,8 @@ Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or AU
 
 Think of this as a place for [WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
 
+It also solves the problem of running a `stable` Debian release but wanting to use a few `test` packages.
+
 # How Does It Work?
 
 dirt is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bourne_shell)) script that follows a life cycle pattern that is a hybred between [port's Makefile](https://docs.freebsd.org/en/books/porters-handbook/order/#porting-order-targets) and [AUR's PKGBUILD](https://wiki.archlinux.org/title/PKGBUILD) file.
