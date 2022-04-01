@@ -62,7 +62,7 @@ install PACKAGE_NAME - Will run through the all the stages from `check_local` to
 
 stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
-proot PACKAGE_NAME - Will create a proot environment and create a shell for you to explore.
+sandbox PACKAGE_NAME - Will create a sandbox environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
@@ -104,13 +104,43 @@ main () {
 	fi
 }
 
-command_proot () {
+command_sandbox () {
 	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>command_proot $@"
+		1>&2 echo ">>>command_sandbox $@"
 	fi
 
 	local package_name=$1
 	run_proot $package_name
+}
+
+# Not complete.
+run_fakechroot () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>run_fakechroot $@"
+	fi
+
+	local package_name=$1
+	# the shell command to run when we drop into fakechroot. (optional)
+	local shell_command=$2
+
+	local package_path="$(get_package_path $package_name)"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package $package_name.  Try specific version."
+		exit 3
+	fi
+
+	local package_dir="$(dirname "$package_path")"
+
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	mkdir -p "${workspace}"
+
+	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
+	mkdir -p "${prefix}"
+
+
+	mkdir -p "${DIRT_HOOK_PATH}"
+
+	# TODO
 }
 
 run_proot () {
@@ -140,7 +170,7 @@ run_proot () {
 	mkdir -p "${DIRT_HOOK_PATH}"
 
 	proot \
-	--rootfs="${DIRT_LOCATION}/dir-for-proot" \
+	--rootfs="${DIRT_LOCATION}/dir-for-sandbox" \
 	--bind="${package_dir}":/package \
 	--bind="${workspace}":/workspace \
 	--bind="${prefix}":"${DIRT_HOOK_PATH}" \

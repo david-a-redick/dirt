@@ -2,10 +2,15 @@
 PREFIX ?= 'the directory to install the package'
 PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
+# The format version of this package.
+schema:
+	@echo '0'
+
 # A sanity check of the local system.
 # Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
-	@true
+	@echo 'compiles but the tests fail and hard hang'
+	@false
 
 # Install debian packages.
 dependencies_debian:
@@ -41,17 +46,19 @@ configure:
 # first build the config and loader
 # then compile PRoot and CARE
 build:
-	cd proot-5.3.0 && make -C src loader.elf loader-m32.elf build.h
-	cd proot-5.3.0 && make -C src proot care
+	cd proot-5.3.0 && PREFIX=$(PREFIX) make -C src loader.elf loader-m32.elf build.h
+	cd proot-5.3.0 && PREFIX=$(PREFIX) make -C src proot care
 
 # Run unit tests and perform compilation verification.
 # Known as 'check' in AUR.
+# NOTE: Some tests fail.
 test:
-	cd proot-5.3.0 && make -C test
+	cd proot-5.3.0 && PREFIX=$(PREFIX) make -C test
 
 # Install the package to the local system.
+# NOTE: That the proot's install is very silent.
 install_package:
-	@true
+	cd proot-5.3.0 && PREFIX=$(PREFIX) make -C src install
 
 # Any post install checks ands tests.
 check_install:

@@ -1,44 +1,43 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
-}
+# The format version of this package.
+schema:
+	@echo '0'
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	# The libsdl-ttf2.0 is only needed if you do WIDE=Y
-	echo "libsdl1.2-dev libsdl-ttf2.0-dev xaw3dg-dev"
-}
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
+check_local:
+	@true
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+# Install debian packages.
+# The libsdl-ttf2.0 is only needed if you do WIDE=Y
+dependencies_debian:
+	sudo apt-get install libsdl1.2-dev libsdl-ttf2.0-dev xaw3dg-dev
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# Install dirt packages
+dependencies_dirt:
+	@true
+
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+fetch:
 	git clone https://github.com/wmcbrine/PDCurses.git
-	cd PDCurses
-	git checkout 3.9
-}
+	cd PDCurses && git checkout 3.9
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+# Perform any check sums or gpg signature verifications.
+verify:
+	@true
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	return 0
-}
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
+	@true
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	return 0
-}
+# Known as prepare `patch` in ports.
+prepare:
+	@true
 
 configure () {
 	# Configure the source codes build setup.
@@ -92,13 +91,9 @@ install_package () {
 	install -Dm644 sdl1/pdcurses.so "$install_prefix/lib/libpdcurses.so"
 }
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	return 0
-}
+check_install:
+	@true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+purge:
+	@true
+

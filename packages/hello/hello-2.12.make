@@ -2,6 +2,10 @@
 PREFIX ?= 'the directory to install the package'
 PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
+# The format version of this package.
+schema:
+	@echo '0'
+
 check_local:
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.

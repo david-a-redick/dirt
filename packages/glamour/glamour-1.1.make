@@ -1,21 +1,17 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	echo 'possible copyright voliations with two music files.'
-	echo 'pending resolution'
-	exit 1
-}
+check_local:
+	@echo 'possible copyright voliations with two music files.'
+	@echo 'pending resolution'
+	@false
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo "python3-pygame"
-}
+dependencies_debian:
+	sudo apt-get python3-pygame
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+dependencies_dirt:
+	@true
 
 fetch () {
 	# Download the source code.
@@ -31,55 +27,26 @@ verify () {
 	sha512sum -c "${package_dir}/glamour-1.1.sha512"
 }
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
 	tar -xf glamour.tar.gz
-}
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+prepare:
+	@true
 
-configure () {
-	# Configure the source codes build setup.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+configure:
+	@true
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+build:
+	@true
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+test:
+	@true
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+install_package:
+	@true
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+check_install:
+	@true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+purge:
+	@true

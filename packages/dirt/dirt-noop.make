@@ -1,5 +1,9 @@
 # A do nothing package.
 
+# The format version of this package.
+schema:
+	@echo '0'
+
 # A sanity check of the local system.
 # Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:

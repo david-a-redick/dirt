@@ -1,5 +1,9 @@
 # A package that does nothing but fail at the local sanity check.
 
+# The format version of this package.
+schema:
+	@echo '0'
+
 check_local:
 	@echo 'The install should stop here.'
 	@false

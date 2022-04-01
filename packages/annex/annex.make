@@ -2,42 +2,46 @@
 PREFIX ?= 'the directory to install the package'
 PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local:
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	true
+# The format version of this package.
+schema:
+	@echo '0'
 
-list_dependencies_debian:
-	# Install debian packages.
-	# nsis is only needed if you build a Windows installer.
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
+check_local:
+	@true
+
+# Install debian packages.
+# nsis is only needed if you build a Windows installer.
+dependencies_debian:
 	sudo apt-get install megaglest
 
-list_dependencies_dirt:
-	# Install dirt packages
-	true
+# Install dirt packages
+dependencies_dirt:
+	@true
 
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# by default you'll be on the development branch, master is the most stable.
 fetch:
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 	git clone https://bitbucket.org/annexctw/annex
-	# by default you'll be on the development branch, master is the most stable.
 
+# Perform any check sums or gpg signature verifications.
 verify:
-	# Perform any check sums or gpg signature verifications.
-	true
+	@true
 
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	true
+	@true
 
+# Known as prepare `patch` in ports.
 prepare:
-	# Known as prepare `patch` in ports.
-	true
+	@true
 
+# Configure the source codes build setup.
 configure:
-	# Configure the source codes build setup.
-	true
+	@true
 
 build:
 	# Compile and otherwise package up for installation or distribution.
@@ -47,14 +51,14 @@ build:
 	#./make-release.sh --dataonly
 
 	# the above is really bundling everything into 7 zip file.
-	true
+	@true
 
 test:
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
 
 	#test -f ./annex-release/snapshot/annex-data.7z
-	true
+	@true
 
 install_package:
 	# Install the package to the local system.
@@ -64,11 +68,9 @@ install_package:
 
 	# redick is just going to copy the files.
 	# following the same convention as the Debian megaglest-data package.
-	data_dir="$(PREFIX)/share/games/annex"
-	mkdir -p "$data_dir"
+	mkdir -p "$(PREFIX)/share/games/annex"
 
-	cd annex
-
+	cd annex && \
 	cp -r servers.ini \
 	glestkeys.ini \
 	editor.ico \
@@ -79,14 +81,13 @@ install_package:
 	scenarios \
 	techs \
 	tilesets \
-	"$data_dir"
-}
+	"$(PREFIX)/share/games/annex"
 
 check_install:
 	# Any post install checks ands tests.
 	megaglest --data-path="$(PREFIX)/share/games/annex"
 
+# Remove any configuration (dot files) and other files created during run time.
 purge:
-	# Remove any configuration (dot files) and other files created during run time.
-	true
+	@true
 

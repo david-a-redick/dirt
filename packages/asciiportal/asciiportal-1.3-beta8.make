@@ -2,10 +2,14 @@
 PREFIX ?= 'the directory to install the package'
 PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
+# The format version of this package.
+schema:
+	@echo '0'
+
 check_local:
 	# A sanity check of the local system.
 	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	true
+	@true
 
 dependencies_debian:
 	# Install debian packages.
@@ -30,20 +34,19 @@ fetch:
 
 verify:
 	# Perform any check sums or gpg signature verifications.
-	true
+	@true
 
 extract:
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	true
+	@true
 
 prepare:
 	# Known as prepare `patch` in ports.
 	cd ASCIIpOrtal && git apply "$(PACKAGE_DIR)/v1.3-beta8-dirt.patch"
-}
 
 configure:
 	# Configure the source codes build setup.
-	true
+	@true
 
 build:
 	# Compile and otherwise package up for installation or distribution.
@@ -54,7 +57,7 @@ build:
 test:
 	# Run unit tests and perform compilation verification.
 	# Known as `check` in AUR.
-	true
+	@true
 
 install_package:
 	# Install the package to the local system.
@@ -66,9 +69,9 @@ install_package:
 
 check_install:
 	# Any post install checks ands tests.
-	true
+	@true
 
 purge:
 	# Remove any configuration (dot files) and other files created during run time.
-	true
+	@true
 

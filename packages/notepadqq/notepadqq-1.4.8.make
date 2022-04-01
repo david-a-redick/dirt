@@ -1,41 +1,32 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
-}
+# The format version of this package.
+schema:
+	@echo '0'
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo "qttools5-dev-tools libqt5webkit5 libqt5webkit5-dev libqt5svg5 libqt5svg5-dev"
-}
+check_local:
+	@true
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+list_dependencies_debian:
+	sudo apt-get install qttools5-dev-tools libqt5webkit5 libqt5webkit5-dev libqt5svg5 libqt5svg5-dev"
 
-fetch () {
+dependencies_dirt:
+	@true
+
+fetch:
 	git clone https://github.com/notepadqq/notepadqq.git
-	cd notepadqq
-	git checkout v1.4.8
-	true
-}
+	cd notepadqq &&	git checkout v1.4.8
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+verify:
+	@true
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	return 0
-}
+extract:
+	@true
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	return 0
-}
+prepare:
+	@true
 
 configure () {
 	# Configure the source codes build setup.
@@ -65,11 +56,8 @@ install_package () {
 	make install
 }
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	return 0
-}
+check_install:
+	@true
 
 purge () {
 	# Remove any configuration (dot files) and other files created during run time.
