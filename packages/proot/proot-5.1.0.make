@@ -11,10 +11,12 @@ schema:
 check_local:
 	@true
 
+# Install debian packages.
+# sudo apt-get install ...
 dependencies_debian:
-	sudo apt-get install libgconf2-dev
+	@true
 
-# Space delimited list of other dirt packages.
+# Install dirt packages
 dependencies_dirt:
 	@true
 
@@ -22,14 +24,15 @@ dependencies_dirt:
 # Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 # The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 fetch:
-	wget https://download.gnome.org/sources/gconfmm/2.28/gconfmm-2.28.3.tar.xz
+	wget https://github.com/proot-me/proot/archive/refs/tags/v5.1.0.tar.gz
 
+# Perform any check sums or gpg signature verifications.
 verify:
 	@true
 
 # In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	tar -xf gconfmm-2.28.3.tar.xz
+	tar -xf v5.1.0.tar.gz
 
 # Known as prepare 'patch' in ports.
 prepare:
@@ -37,18 +40,20 @@ prepare:
 
 # Configure the source codes build setup.
 configure:
-	cd gconfmm-2.28.3 && ./configure --prefix="$(PREFIX)"
+	@true
 
 # Compile and otherwise package up for installation or distribution.
 build:
-	cd gconfmm-2.28.3 && make
+	cd proot-5.1.0 && PREFIX=$(PREFIX) make -C src
 
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
 test:
-	@true
+	cd proot-5.1.0 && PREFIX=$(PREFIX) make -C test
 
 # Install the package to the local system.
 install_package:
-	cd gconfmm-2.28.3 && make install
+	@true
 
 # Any post install checks ands tests.
 check_install:

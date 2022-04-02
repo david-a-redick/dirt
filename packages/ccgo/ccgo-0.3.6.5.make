@@ -10,7 +10,7 @@ schema:
 # Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
 	@echo "Cant figure out how to find local gconfmm"
-	false
+	@false
 
 dependencies_debian:
 	sudo apt-get install libgtkmm-2.4-dev
@@ -23,17 +23,14 @@ fetch:
 	wget https://ccdw.org/~cjj/prog/ccgo/src/ccgo-0.3.6.5.tar.gz
 
 verify:
-	# Perform any check sums or gpg signature verifications.
-	true
+	@true
 
 extract:
 	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 	tar -xf ccgo-0.3.6.5.tar.gz
-}
 
 prepare:
-	# Known as prepare `patch` in ports.
-	true
+	@true
 
 configure:
 	# Configure the source codes build setup.
@@ -44,14 +41,14 @@ build:
 	cd ccgo-0.3.6.5 && make
 
 test:
-	true
+	@true
 
 install_package:
-	true
+	@true
 
 check_install:
-	true
+	@true
 
 purge:
-	true
+	@true
 

@@ -2,6 +2,14 @@
 ###  WARNING USE FULL ABSOLUTE PATH!!
 ###
 
+# You'll have to update a bunch of env variables in your .profile or .bashrc
+# PATH=${DIRT_HOOK_PATH}/bin:SYSTEM...
+# LD_LIBRARY_PATH=${DIRT_HOOK_PATH}/lib:SYSTEM...
+# INFOPATH=${DIRT_HOOK_PATH}/share/info:SYSTEM...
+# MANPATH=${DIRT_HOOK_PATH}/share/man:SYSTEM...
+# PKG_CONFIG_PATH=${DIRT_HOOK_PATH}/lib/pkgconfig
+
+
 # All downloaded source code and other stuff will be placed here.
 # and patched and compiled.
 # dirt assumes you want to hack and fiddle with the code, so it's left for you.

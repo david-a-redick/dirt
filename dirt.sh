@@ -110,7 +110,7 @@ command_sandbox () {
 	fi
 
 	local package_name=$1
-	run_proot $package_name
+	run_proot $package_name "/bin/bash"
 }
 
 # Not complete.

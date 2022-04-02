@@ -9,7 +9,7 @@ schema:
 # A sanity check of the local system.
 # Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
-	@echo 'compiles but the tests fail and hard hang'
+	@echo 'compiles but the tests fail and hard hang in proot-5.1.0'
 	@false
 
 # Install debian packages.

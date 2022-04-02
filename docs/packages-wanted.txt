@@ -3,12 +3,16 @@ https://www.debian.org/devel/wnpp/requested
 
 See these for potential packages not on debian's radar:
 https://libregamewiki.org
-
 https://www.icewalkers.com/linux/software/
+https://github.com/void-linux/void-packages/
+https://git.slackbuilds.org/slackbuilds/tree/
+https://aur.archlinux.org/
+https://packages.gentoo.org/
 
 --
 
-Some sort of app that will be like wc but can do better selections at the character level.
+Some sort of app that will be like wc but can do better selections at
+the character level.
 and paragraph counts.
 average word length.  average paragraph length.
 character distribution.

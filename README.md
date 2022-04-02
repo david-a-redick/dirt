@@ -5,7 +5,7 @@ Alpha but actually does stuff.
 # What is dirt?
 
 dirt is a dirt simple package manager intended to be run inside an existing Debian system, inside a user's home directory.
- 
+
 It is a source based personal package manager that draws inspiration from [FreeBSD's ports](https://www.freshports.org), [archlinux's Arch User Repository](https://aur.archlinux.org/packages) (AUR), [gentoo's portage](https://packages.gentoo.org) and little from [GoboLinux](https://gobolinux.org).
 
 dirt intended to help create official Debian packages and experiment with applications not currently in Debian.  When possible official Debian packages will be used as the dependencies.  dirt focuses on the end application (leaf package) and NOT the entire set of dependencies libraries from scratch.  Also the packages will built as out-of-the-box and vanilla as possible.  If availible, debug settings will be used and very little in the way of optimization or customization is given.
@@ -15,6 +15,8 @@ Think of dirt as a [linux-from-scratch](https://www.linuxfromscratch.org/) or AU
 Think of this as a place for [WNPP](https://www.debian.org/devel/wnpp/) and pre-Sid packages.
 
 It also solves the problem of running a `stable` Debian release but wanting to use a few `test` packages.
+
+You might also be interested in [qpkg](https://nullprogram.com/blog/2018/03/27/) which is less Debian centric and more general.
 
 # How Does It Work?
 
@@ -59,10 +61,12 @@ NOTE: There are no pre or post functions as in ports.
 
 # How Do I Use dirt?
 
+NOTE: You must use proot 5.3.0 or up. The existing proot 5.1.0 in Debian 11 has bugs.
+
 Log into your Debian 11 system and pop open your favorite terminal console.
 
 ```shell
-$ sudo apt-get install git proot
+$ sudo apt-get install git
 
 $ git clone https://github.com/david-a-redick/dirt.git
 
