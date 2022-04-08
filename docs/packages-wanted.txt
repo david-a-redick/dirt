@@ -17,6 +17,7 @@ and paragraph counts.
 average word length.  average paragraph length.
 character distribution.
 sentences. average sentence length.
+https://github.com/bitcoin-core/secp256k1
 
 
 webfsd
@@ -33,4 +34,36 @@ https://archlinux.org/packages/community/any/netbeans/
 https://github.com/HouzuoGuo/tiedot
 https://github.com/nwjs/nw.js
 https://github.com/jakejs/jake
+https://github.com/joncampbell123/dosbox-x
+AMudClient
+GGMUD
+KBtin
+KildClient
+KMuddy
+http://www.kmud.de/
+mcl
+Mudlet
+MudMagic
+Powwow
+TinTin++
+TinyFugue
+JamochaMUD
+Lyntin
+muby
+Potato
+Soiled
+Trebuchet
+
+http://home.swipnet.se/heathen/linux/sclient.htm
+
+
+
+configure:16933: $PKG_CONFIG --exists --print-errors "libtasn1 >= 2.3"
+Package libtasn1 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libtasn1.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'libtasn1' fou
+
+
+
 

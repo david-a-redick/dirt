@@ -337,6 +337,8 @@ contains () {
 
 	# basically getting cdr from the substring ( $1='fooAbar' $2='A' then 'bar' ).
 	# If there are characters missing then we must have the substring in there.
+	#
+	# https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_02
 	if [ "${string#*$substring}" != "$string" ]; then
 		# in
 		return 0
