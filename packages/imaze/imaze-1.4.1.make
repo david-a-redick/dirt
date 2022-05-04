@@ -12,19 +12,19 @@ check_local:
 	@true
 
 # Install debian packages.
+# sudo apt-get install ...
 dependencies_debian:
-	sudo apt-get install autopoint gperf texinfo help2man
+	sudo apt-get install libmotif-dev libxaw7-dev
 
 # Install dirt packages
 dependencies_dirt:
 	@true
 
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 fetch:
-	# Working directory will be set to the package's working directory (scratch space)
-	git clone https://git.savannah.gnu.org/git/hello.git
-	cd hello && git checkout v2.12
-	# this will fetch submodules and do some setup.
-	cd hello && ./bootstrap
+	@true
 
 # Perform any check sums or gpg signature verifications.
 verify:
@@ -34,26 +34,31 @@ verify:
 extract:
 	@true
 
-# Known as prepare `patch` in ports.
+# Known as prepare 'patch' in ports.
 prepare:
 	@true
 
+# Configure the source codes build setup.
 configure:
-	cd hello && ./configure --prefix="$(PREFIX)"
+	cd imaze-1.4.1/source && ./configure motif
 
+# Compile and otherwise package up for installation or distribution.
 build:
-	cd hello && make
+	@true
 
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
 test:
-	cd hello && make check
+	@true
 
+# Install the package to the local system.
 install_package:
-	cd hello && make install
+	@true
 
+# Any post install checks ands tests.
 check_install:
-	$(PREFIX)/bin/hello
+	@true
 
 # Remove any configuration (dot files) and other files created during run time.
 purge:
 	@true
-

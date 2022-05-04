@@ -19,7 +19,7 @@ character distribution.
 sentences. average sentence length.
 https://github.com/bitcoin-core/secp256k1
 
-
+https://cdemu.sourceforge.io/
 webfsd
 gource
 ctopy
@@ -27,6 +27,7 @@ GNU mtools
 FIX ccgo
 http://www.qtile.org/
 https://github.com/tailhook/tilenol
+http://tombaran.info/autotalent.html
 https://sourceforge.net/projects/gbootroot/files/gbootroot/
 http://mindless.sourceforge.net/
 https://gitlab.com/esr/ctopy
