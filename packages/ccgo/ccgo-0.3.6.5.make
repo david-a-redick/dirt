@@ -15,9 +15,9 @@ check_local:
 dependencies_debian:
 	sudo apt-get install libgtkmm-2.4-dev
 
-dependencies_dirt:
-	# Space delimited list of other dirt packages.
-	echo "gconfmm-2.28.3"
+# List dirt packages
+list_dependencies_dirt:
+	@echo 'gconfmm-2.28.3'
 
 fetch:
 	wget https://ccdw.org/~cjj/prog/ccgo/src/ccgo-0.3.6.5.tar.gz

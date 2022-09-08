@@ -1,6 +1,6 @@
 check_local
 dependencies_debian
-dependencies_dirt
+
 fetch
 verify
 extract

@@ -10,6 +10,6 @@ sandbox PACKAGE_NAME - Will create a sandbox environment and create a shell for 
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
-unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
+unhook PACKAGE_NAME - Will remove all the files done by the `hook` command.
 
 clean PACKAGE_NAME - Will unhook, delete the install and workspace directories of the package.

@@ -16,9 +16,9 @@ check_local:
 dependencies_debian:
 	sudo apt-get install megaglest
 
-# Install dirt packages
+# Space delimited list of other dirt packages.
 dependencies_dirt:
-	@true
+	@echo ''
 
 # Download the source code.
 # Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).

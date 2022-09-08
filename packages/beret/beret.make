@@ -1,91 +1,63 @@
+# These will be defined with proper values at dirt.sh run time.
+PREFIX ?= 'the directory to install the package'
+PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# The format version of this package.
+schema:
+	@echo '0'
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo "libsdl-image1.2-dev fonts-averia-sans-gwf"
-}
+check_local:
+	@true
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+# Install debian packages.
+# sudo apt-get install ...
+dependencies_debian:
+	sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev fonts-averia-sans-gwf
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
-	local install_prefix="$1"
-	local package_dir="$2"
+# Space delimited list of other dirt packages.
+dependencies_dirt:
+	@echo 'beret-data-1.2.2'
 
+fetch:
 	# gitorious is all but dead and the cert has expired.
-	GIT_SSL_NO_VERIFY=true git clone https://gitorious.org/beret/beret.git
-}
+	#GIT_SSL_NO_VERIFY=true git clone https://gitorious.org/beret/beret.git
+	git clone https://github.com/david-a-redick/beret.git
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Perform any check sums or gpg signature verifications.
+verify:
+	@true
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
+	@true
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Known as prepare 'patch' in ports.
+prepare:
+	@true
 
-configure () {
-	# Configure the source codes build setup.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Configure the source codes build setup.
+configure:
+	@true
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Compile and otherwise package up for installation or distribution.
+build:
+	cd beret && PREFIX="$(PREFIX)" PATH_TO_DATA="$(PREFIX)/share/games/beret" make
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
+test:
+	@true
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Install the package to the local system.
+install_package:
+	cd beret && PREFIX="$(PREFIX)" make install
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+# Any post install checks ands tests.
+check_install:
+	@true
+
+# Remove any configuration (dot files) and other files created during run time.
+purge:
+	@true
+

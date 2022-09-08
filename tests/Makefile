@@ -7,6 +7,7 @@ test:
 clean:
 	@rm -f *.test
 
-# This give different results than just running it from a shell
 run:
-	@./test.sh
+	@echo "This give different results than just running it from a shell"
+	@echo "For sanity sake, just run ./test.sh"
+	#@./test.sh

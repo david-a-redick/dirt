@@ -15,9 +15,9 @@ dependencies_debian:
 	# Install debian packages.
 	sudo apt-get install libyaml-cpp-dev libsdl1.2-dev libsdl-mixer1.2-dev
 
+# Space delimited list of other dirt packages.
 dependencies_dirt:
-	# Space delimited list of other dirt packages.
-	echo "pdcurses-3.9"
+	@echo 'pdcurses-3.9'
 
 fetch:
 	# Download the source code.
@@ -52,7 +52,7 @@ build:
 	# Compile and otherwise package up for installation or distribution.
 	# we have to define libraries and runtime shared resources
 	# under $HOME/.local or where ever
-	cd ASCIIpOrtal && make DESTDIR="$(DIRT_HOOK_PATH)" linux
+	cd ASCIIpOrtal && make DESTDIR="$(PREFIX)" linux
 
 test:
 	# Run unit tests and perform compilation verification.

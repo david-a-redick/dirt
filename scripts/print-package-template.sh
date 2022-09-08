@@ -28,9 +28,9 @@ check_local:
 dependencies_debian:
 	@true
 
-# Install dirt packages
-dependencies_dirt:
-	@true
+# Space delimited list of other dirt packages.
+list_dependencies_dirt:
+	@echo ''
 
 # Download the source code.
 # Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).

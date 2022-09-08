@@ -12,7 +12,7 @@ dependencies_debian:
 	echo 'should not reach here'
 	false
 
-dependencies_dirt:
+list_dependencies_dirt:
 	echo 'should not reach here'
 	false
 

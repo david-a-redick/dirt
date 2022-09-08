@@ -21,16 +21,19 @@ if [ "$DIRT_DEBUG" ]; then
 fi
 
 
+# The full path to this dirt.sh file.
 DIRT_SCRIPT_FULL_PATH="$(realpath "$0")"
+# The full path to the directory of this dirt.sh file.
 DIRT_LOCATION="$(dirname "${DIRT_SCRIPT_FULL_PATH}")"
 DIRT_PACKAGES_PATH="${DIRT_LOCATION}/packages"
 DIRT_SCRIPTS_PATH="${DIRT_LOCATION}/scripts"
 
 . "${DIRT_LOCATION}/configuration.sh"
+
 # Need to make sure these are full paths.
 DIRT_WORKSPACE_PATH="$(realpath "$DIRT_WORKSPACE_PATH")"
 DIRT_INSTALL_PATH="$(realpath "$DIRT_INSTALL_PATH")"
-# the run_stages.sh needs this to be exported.
+# The scripts/run_stages.sh needs this to be exported.
 export DIRT_HOOK_PATH="$(realpath "$DIRT_HOOK_PATH")"
 
 usage () {
@@ -66,7 +69,7 @@ sandbox PACKAGE_NAME - Will create a sandbox environment and create a shell for 
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
-unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
+unhook PACKAGE_NAME - Will remove all the files done by the `hook` command.
 
 clean PACKAGE_NAME - Will unhook, delete the install and workspace directories of the package.
 '
@@ -175,6 +178,7 @@ run_proot () {
 	--bind="${workspace}":/workspace \
 	--bind="${prefix}":"${DIRT_HOOK_PATH}" \
 	--bind="${DIRT_LOCATION}/scripts":/scripts \
+	--bind="${DIRT_INSTALL_PATH}":/install \
 	--cwd=/ \
 	--bind=/bin \
 	--bind=/dev \
@@ -215,7 +219,7 @@ command_install () {
 
 	local package_name=$1
 
-	run_stages $package_name 'check_local' 'dependencies_debian' 'dependencies_dirt'
+	run_stages $package_name 'check_local' 'dependencies_debian' 'list_dependencies_dirt'
 	run_proot $package_name "/scripts/run_stages.sh ${package_name}"
 }
 
@@ -227,7 +231,7 @@ command_stage () {
 	local package_name=$1
 	local stage=$2
 
-	if [ 'check_local' = "$stage" ] || [ 'dependencies_debian' = "$stage" ] || [ 'dependencies_dirt' = "$stage" ]; then
+	if [ 'check_local' = "$stage" ] || [ 'dependencies_debian' = "$stage" ] || [ 'list_dependencies_dirt' = "$stage" ]; then
 		run_stages $package_name $stage
 	else
 		run_proot $package_name "/scripts/run_stages.sh ${package_name} ${stage}"
@@ -437,36 +441,6 @@ is_a_debian_package () {
 	return $?
 }
 
-# given a single package name, is it installed?
-is_debian_package_installed () {
-	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>is_debian_package_installed $@"
-	fi
-
-	dpkg-query --status $1 > /dev/null 2>&1
-	return $?
-}
-
-# given a single package name, determine if its a real package name or just some letters
-is_a_dirt_package () {
-	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>is_a_dirt_package $@"
-	fi
-
-	local package_path="$(get_package_path $1)"
-	return $?
-}
-
-# given a single package name, is it installed?
-is_dirt_package_installed () {
-	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>is_dirt_package_installed $@"
-	fi
-
-	ls "${DIRT_INSTALL_PATH}/${1}" > /dev/null 2>&1
-	return $?
-}
-
 # runs stages outside of proot
 run_stages () {
 	if [ "$DIRT_DEBUG" ]; then
@@ -498,7 +472,7 @@ run_stages () {
 		cd "${workspace}"
 		PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
 		if [ 0 -ne $? ]; then
-			echo "Failed at stage: $stage"
+			1>&2 echo "Failed at stage: $stage"
 			exit 6
 		fi
 	done
