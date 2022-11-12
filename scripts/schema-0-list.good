@@ -1,0 +1,9 @@
+schema:
+fetch:
+verify:
+extract:
+prepare:
+configure:
+build:
+test:
+purge:

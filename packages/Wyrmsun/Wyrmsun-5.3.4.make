@@ -6,91 +6,65 @@ PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signa
 schema:
 	@echo '0'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
+check_local:
+	@true
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo ""
-}
+# Install debian packages.
+# sudo apt-get install ...
+dependencies_debian:
+	@true
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+# Space delimited list of other dirt packages.
+list_dependencies_dirt:
+	@echo ''
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
-	local install_prefix="$1"
-	local package_dir="$2"
+##
+# All of the following stages will be done in a proot environment.
+# The real working directory will be: $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# The proot working directory will be: /workspace
+##
+
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+fetch:
 	wget https://github.com/Andrettin/Wyrmsun/archive/refs/tags/v5.3.4.tar.gz -O Wyrmsun_5.3.4-1.orig.tar.gz
-}
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	local install_prefix="$1"
-	local package_dir="$2"
-	sha512sum -c "${package_dir}/Wyrmsun-5.3.4.sha512"
-}
+# Perform any check sums or gpg signature verifications.
+verify:
+	sha512sum -c "$(PACKAGE_DIR)/Wyrmsun-5.3.4.sha512"
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	local install_prefix="$1"
-	local package_dir="$2"
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
 	tar -xf Wyrmsun_5.3.4-1.orig.tar.gz
-}
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Known as prepare 'patch' in ports.
+prepare:
+	@true
 
-configure () {
-	# Configure the source codes build setup.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Configure the source codes build setup.
+configure:
+	@true
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Compile and otherwise package up for installation or distribution.
+build:
+	@true
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
+test:
+	@true
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Install the package to the local system.
+install_package:
+	@true
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	local package_dir="$2"
-	return 0
-}
+# Any post install checks ands tests.
+check_install:
+	@true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+# Remove any configuration (dot files) and other files created during run time.
+purge:
+	@true
+

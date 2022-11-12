@@ -6,79 +6,65 @@ PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signa
 schema:
 	@echo '0'
 
-check_local () {
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
-	return 0
-}
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
+check_local:
+	@true
 
-list_dependencies_debian () {
-	# Space delimited list of debian packages.
-	echo ""
-}
+# Install debian packages.
+# sudo apt-get install ...
+dependencies_debian:
+	@true
 
-list_dependencies_dirt () {
-	# Space delimited list of other dirt packages.
-	echo ""
-}
+# Space delimited list of other dirt packages.
+list_dependencies_dirt:
+	@echo ''
 
-fetch () {
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+##
+# All of the following stages will be done in a proot environment.
+# The real working directory will be: $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# The proot working directory will be: /workspace
+##
+
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+fetch:
 	git clone https://github.com/c00kiemon5ter/monsterwm.git
-}
 
-verify () {
-	# Perform any check sums or gpg signature verifications.
-	return 0
-}
+# Perform any check sums or gpg signature verifications.
+verify:
+	@true
 
-extract () {
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
-	return 0
-}
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
+extract:
+	@true
 
-prepare () {
-	# Known as prepare `patch` in ports.
-	return 0
-}
+# Known as prepare 'patch' in ports.
+prepare:
+	@true
 
-configure () {
-	# Configure the source codes build setup.
-	local install_prefix="$1"
-	cd monsterwm
-	cp config.def.h config.h
-}
+# Configure the source codes build setup.
+configure:
+	cd monsterwm &&	cp config.def.h config.h
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	cd monsterwm
-	make
-}
+# Compile and otherwise package up for installation or distribution.
+build:
+	cd monsterwm && make
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-}
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
+test:
+	@true
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	cd monsterwm
-	PREFIX="$install_prefix" make install
-	return 0
-}
+# Install the package to the local system.
+install_package:
+	cd monsterwm && PREFIX="$(PREFIX)" make install
 
-check_install () {
-	# Any post install checks ands tests.
-	local install_prefix="$1"
-	return 0
-}
+# Any post install checks ands tests.
+check_install:
+	@true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	return 0
-}
+# Remove any configuration (dot files) and other files created during run time.
+purge:
+	@true
+

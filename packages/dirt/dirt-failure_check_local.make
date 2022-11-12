@@ -28,7 +28,7 @@ extract:
 	echo 'should not reach here'
 	false
 
-patch:
+prepare:
 	echo 'should not reach here'
 	false
 

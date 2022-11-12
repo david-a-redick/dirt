@@ -6,60 +6,66 @@ PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signa
 schema:
 	@echo '0'
 
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
 	@true
 
-list_dependencies_debian:
-	sudo apt-get install qttools5-dev-tools libqt5webkit5 libqt5webkit5-dev libqt5svg5 libqt5svg5-dev"
+# Install debian packages.
+# sudo apt-get install ...
+dependencies_debian:
+	sudo apt-get install qttools5-dev-tools libqt5webkit5 libqt5webkit5-dev libqt5svg5 libqt5svg5-dev
 
-dependencies_dirt:
-	@true
+# Space delimited list of other dirt packages.
+list_dependencies_dirt:
+	@echo ''
 
+##
+# All of the following stages will be done in a proot environment.
+# The real working directory will be: $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# The proot working directory will be: /workspace
+##
+
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 fetch:
 	git clone https://github.com/notepadqq/notepadqq.git
 	cd notepadqq &&	git checkout v1.4.8
 
+# Perform any check sums or gpg signature verifications.
 verify:
 	@true
 
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
 	@true
 
+# Known as prepare 'patch' in ports.
 prepare:
 	@true
 
-configure () {
-	# Configure the source codes build setup.
-	local install_prefix="$1"
-	cd notepadqq
-	./configure --prefix "${install_prefix}"
-}
+# Configure the source codes build setup.
+configure:
+	cd notepadqq && ./configure --prefix "$(PREFIX)"
 
-build () {
-	# Compile and otherwise package up for installation or distribution.
-	local install_prefix="$1"
-	cd notepadqq
-	make
-}
+# Compile and otherwise package up for installation or distribution.
+build:
+	cd notepadqq && make
 
-test () {
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-	local install_prefix="$1"
-	return 0
-}
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
+test:
+	@true
 
-install_package () {
-	# Install the package to the local system.
-	local install_prefix="$1"
-	cd notepadqq
-	make install
-}
+# Install the package to the local system.
+install_package:
+	cd notepadqq && make install
 
+# Any post install checks ands tests.
 check_install:
 	@true
 
-purge () {
-	# Remove any configuration (dot files) and other files created during run time.
-	echo 'todo ~/.config/Notepadqq/'
-}
+# Remove any configuration (dot files) and other files created during run time.
+purge:
+	rm -rf $(HOME)/.config/Notepadqq
+
