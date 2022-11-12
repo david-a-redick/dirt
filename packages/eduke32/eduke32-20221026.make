@@ -1,16 +1,4 @@
-#!/bin/sh
-
-# Copyright 2020 - David A. Redick
-#
-# This file is part of dirt.
-#
-# dirt is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License.
-#
-# dirt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License along with dirt. If not, see <https://www.gnu.org/licenses/>. 
-
-echo "# These will be defined with proper values at dirt.sh run time.
+# These will be defined with proper values at dirt.sh run time.
 PREFIX ?= 'the directory to install the package'
 PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signatures, checksums or patches'
 
@@ -26,22 +14,18 @@ check_local:
 # Install debian packages.
 # sudo apt-get install ...
 dependencies_debian:
-	@true
+	sudo apt-get install libvpx-dev libvpx6
 
 # Space delimited list of other dirt packages.
 list_dependencies_dirt:
 	@echo ''
 
-##
-# All of the following stages will be done in a proot environment.
-# The real working directory will be: \$DIRT_WORKSPACE_PATH/\$PACKAGE_NAME/
-# The proot working directory will be: /workspace
-##
-
 # Download the source code.
 # Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 fetch:
-	@true
+	wget https://dukeworld.com/eduke32/synthesis/latest/eduke32_src_20221026-10165-a9c797dcb.tar.xz
+
 
 # Perform any check sums or gpg signature verifications.
 verify:
@@ -49,7 +33,7 @@ verify:
 
 # In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	@true
+	tar -xf eduke32_src_20221026-10165-a9c797dcb.tar.xz
 
 # Known as prepare 'patch' in ports.
 prepare:
@@ -57,11 +41,11 @@ prepare:
 
 # Configure the source codes build setup.
 configure:
-	@true
+	cd eduke32_20221026-10165-a9c797dcb
 
 # Compile and otherwise package up for installation or distribution.
 build:
-	@true
+	make -f GNUmakefile
 
 # Run unit tests and perform compilation verification.
 # Known as 'check' in AUR.
@@ -70,7 +54,9 @@ test:
 
 # Install the package to the local system.
 install_package:
-	@true
+	mkdir -p $(PREFIX)/bin
+	install eduke32_20221026-10165-a9c797dcb/eduke32 $(PREFIX)/bin/eduke32
+	install eduke32_20221026-10165-a9c797dcb/mapster32 $(PREFIX)/bin/mapster32
 
 # Any post install checks ands tests.
 check_install:
@@ -79,4 +65,4 @@ check_install:
 # Remove any configuration (dot files) and other files created during run time.
 purge:
 	@true
-"
+

@@ -128,7 +128,7 @@ run_fakechroot () {
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name.  Try specific version."
+		1>&2 echo "No dirt package '$package_name'.  Try specific version."
 		exit 3
 	fi
 
@@ -157,7 +157,7 @@ run_proot () {
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name.  Try specific version."
+		1>&2 echo "No dirt package '$package_name'.  Try specific version."
 		exit 3
 	fi
 
@@ -171,6 +171,10 @@ run_proot () {
 
 
 	mkdir -p "${DIRT_HOOK_PATH}"
+
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>> Entering proot"
+	fi
 
 	proot \
 	--rootfs="${DIRT_LOCATION}/dir-for-sandbox" \
@@ -196,6 +200,10 @@ run_proot () {
 	--bind=/usr \
 	--bind=/var \
 	$shell_command
+
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>> Exiting proot"
+	fi
 }
 
 command_search () {
@@ -247,7 +255,7 @@ command_hook () {
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
+		1>&2 echo "No dirt package '$package_name'"
 		exit 3
 	fi
 
@@ -269,7 +277,7 @@ command_unhook () {
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
+		1>&2 echo "No dirt package '$package_name'"
 		exit 3
 	fi
 
@@ -297,7 +305,7 @@ command_clean () {
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
+		1>&2 echo "No dirt package '$package_name'"
 		exit 3
 	fi
 
@@ -453,7 +461,7 @@ run_stages () {
 
 	local package_path="$(get_package_path $package_name)"
 	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package $package_name"
+		1>&2 echo "No dirt package '$package_name'"
 		exit 3
 	fi
 
