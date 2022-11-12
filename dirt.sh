@@ -386,6 +386,7 @@ get_package_path () {
 
 # Given a correctly syntaxed package name (NAME-VERSION[-FEATURE]) return NAME.
 # This is not the gentoo category nor the debian section.
+# This the "main" directory for a dirt package.
 get_package_group () {
 	if [ "$DIRT_DEBUG" ]; then
 		1>&2 echo ">>>get_package_group $@"
@@ -394,58 +395,28 @@ get_package_group () {
 	echo ${1%%-*}
 }
 
-# given a list of (possible) debian/dirt packages
-# determine if any need to be installed and if so stop and prompt user.
-# first arg must be 'debian' or 'dirt'
-# which will use the appropriate functions:
-# 	is_a_${system}_package
-#	is_${system}_package_installed
-need_to_install () {
+# It is possible for the directory to be there but nothing in it.
+# The user will have to figure out what to do.
+is_dirt_package_installed () {
 	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>need_to_install $@"
+		1>&2 echo ">>>is_dirt_package_installed $@"
 	fi
-
-	local system=$1
-	shift
-
-	local need=
-	while [ $# -ge 1 ]; do
-		local package_name=$1
-		is_a_${system}_package $package_name
-		if [ 0 -eq $? ]; then
-			is_${system}_package_installed $package_name
-			if [ 0 -eq $? ]; then
-				# installed
-				#echo "YOU GOT ${package_name}"
-				true
-			else
-				# not installed
-				need="${need} ${package_name}"
-			fi
-		else
-			# some one give a bad package name.
-			# bail out.
-			1>&2 echo "The dirt package references an invalid ${system} package: ${package_name}"
-			exit 4
-		fi
-
-		shift
-	done
-
-	if [ ! -z "$need" ]; then
-		echo "You need to get some ${system} packages:"
-		echo "$need"
-		exit 5
+	
+	local package_name=$1
+	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>$prefix"
 	fi
+	[ -d "$prefix" ]
+	return $?
 }
 
-# given a single package name, determine if its a real package name or just some letters
-is_a_debian_package () {
-	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>is_a_debian_package $@"
-	fi
-
-	apt-cache show $1 > /dev/null 2>&1
+# It is possible for the directory to be there but nothing in it.
+# The user will have to figure out what to do.
+is_dirt_package_fetched () {
+	local package_name=$1
+	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
+	[ -d "$workspace" ]
 	return $?
 }
 
@@ -478,10 +449,40 @@ run_stages () {
 		shift
 
 		cd "${workspace}"
-		PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
+
+		local dependencies=
+		if [ 'list_dependencies_dirt' = "$stage" ]; then
+			# we want to capture the output so we can install dependencies.
+			dependencies=$(PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage)
+		else
+			PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
+		fi
+		
 		if [ 0 -ne $? ]; then
 			1>&2 echo "Failed at stage: $stage"
 			exit 6
+		fi
+
+		if [ -n "$dependencies" ]; then
+			install_dirt_dependencies $dependencies
+		fi
+	done
+}
+
+install_dirt_dependencies () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>install_dirt_dependencies $@"
+	fi
+
+	while [ $# -ge 1 ]; do
+		local package_name=$1
+		shift
+
+		is_dirt_package_installed $package_name
+		if [ 0 -eq $? ]; then
+			echo "Dependency package '$package_name' already installed."
+		else
+			"${DIRT_SCRIPT_FULL_PATH}" install $package_name
 		fi
 	done
 }

@@ -18,7 +18,7 @@ dependencies_debian:
 
 # List dirt packages
 list_dependencies_dirt:
-	@echo 'dirt-noop'
+	@echo 'dirt-noop dirt-noop'
 
 # Download the source code.
 # Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
@@ -53,7 +53,7 @@ test:
 
 # Install the package to the local system.
 install_package:
-	@true
+	@echo 'Installing dirt-depends.'
 
 # Any post install checks ands tests.
 check_install:

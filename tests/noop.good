@@ -1,6 +1,5 @@
 check_local
 dependencies_debian
-
 fetch
 verify
 extract

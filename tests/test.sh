@@ -48,4 +48,15 @@ test_return_code 0 $? 'stage-fetch run: FAILED'
 diff stage-fetch.test stage-fetch.good > /dev/null 2>&1
 test_return_code 0 $? 'stage-fetch test: FAILED'
 
+../dirt.sh foo bar > unknown_command.test 2>&1
+test_return_code 2 $? 'unknown_command run: FAILED'
+diff unknown_command.test unknown_command.good > /dev/null 2>&1
+test_return_code 0 $? 'unknown_command test: FAILED'
+
+../dirt.sh foo > run_hint.test 2>&1
+test_return_code 1 $? 'run_hint run: FAILED'
+diff run_hint.test run_hint.good > /dev/null 2>&1
+test_return_code 0 $? 'run_hint test: FAILED'
+
+
 rm *.test
