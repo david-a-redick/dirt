@@ -65,7 +65,7 @@ install PACKAGE_NAME - Will run through the all the stages from `check_local` to
 
 stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
-sandbox PACKAGE_NAME - Will create a sandbox environment and create a shell for you to explore.
+sandbox PACKAGE_NAME - Will create a proot sandbox environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
@@ -148,7 +148,7 @@ run_proot () {
 
 	proot \
 	--rootfs="${DIRT_LOCATION}/dir-for-sandbox" \
-	--bind="${DIRT_LOCATION}":/_ \
+	--bind="${DIRT_LOCATION}":/dirt \
 	--bind="${package_dir}":/package \
 	--bind="${workspace}":/workspace \
 	--bind="${prefix}":"${DIRT_HOOK_PATH}" \
@@ -254,9 +254,7 @@ command_unhook () {
 
 	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
 
-	find "$prefix" -type f -exec "$DIRT_SCRIPTS_PATH/unhook.sh" file "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
-
-	find "$prefix" -type l -exec "$DIRT_SCRIPTS_PATH/unhook.sh" file "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
+	find "$prefix" -not -type d -exec "$DIRT_SCRIPTS_PATH/unhook.sh" file "$DIRT_INSTALL_PATH" "$DIRT_HOOK_PATH" ${package_name} \{\} \;
 
 	# note: this will hit on the prefix dir itself.
 	# make sure we do depth first to clean child dirs before the parents
