@@ -18,7 +18,7 @@ PACKAGE_NAME=$(basename "$1")
 
 PACKAGE_RESULTS=$(mktemp dirt.chk-pkg-scm.XXX)
 
-grep '^[[:alpha:]]*:' "$PATH_TO_PACKAGE" > "$PACKAGE_RESULTS"
+grep '^[[:graph:]]*:' "$PATH_TO_PACKAGE" > "$PACKAGE_RESULTS"
 diff "$PACKAGE_RESULTS" "$LOCATION/schema-0-list.good" > /dev/null 2>&1
 
 if [ 0 -ne $? ]; then

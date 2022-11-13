@@ -1,4 +1,7 @@
 schema:
+check_local:
+dependencies_debian:
+list_dependencies_dirt:
 fetch:
 verify:
 extract:
@@ -6,4 +9,6 @@ prepare:
 configure:
 build:
 test:
+install_package:
+check_install:
 purge:
