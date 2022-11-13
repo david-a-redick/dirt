@@ -22,8 +22,6 @@ dirt is just a POSIX sh ([Bourne shell](https://en.wikipedia.org/wiki/Bourne_she
 
 The `packages` directory contains all the package groups and package files.
 
-There is also a `packages-by-category-gentoo` that follows the [hierarchy of gentoo's package repo](https://gitweb.gentoo.org/repo/gentoo.git/tree/).  This is mostly for humans that want to browse.
-
 A package is just a Makefile following a naming pattern of `NAME-VERSION[-FEATURES].make`, where NAME is the application name lower cased (firefox), version is the official source id (91.0.1esr) and FEATURES are a way to convey that there mutually exclusive compile time features that this package contains.
 
 Each package contains the following make targets executed in this order and may contain comments and hints.  You are expected to be able to read the package file and encourage to experiment.
@@ -34,7 +32,7 @@ NOTE: There are no pre or post functions as in ports.
 
 `dependencies_debian` - Will run `sudo apt-get install ...` for all the debian packages.
 
-`dependencies_dirt` - Will run `dirt.sh install ...` for all the dirt packages.
+`list_dependencies_dirt` - Will run `dirt.sh install ...` for all the dirt packages.
 
 `fetch` - Download the source code.  Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 
@@ -55,7 +53,6 @@ NOTE: There are no pre or post functions as in ports.
 `check_install` - Any post install checks ands tests.
 
 `purge` - Remove any configuration (dot files) and other files created during run time.
-
 
 # How Do I Use dirt?
 
@@ -81,7 +78,7 @@ install PACKAGE_NAME - Will run through the all the stages from `check_local` to
 
 stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
-sandbox PACKAGE_NAME - Will create a sandbox environment and create a shell for you to explore.
+sandbox PACKAGE_NAME - Will create a proot sandbox environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
 
