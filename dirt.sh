@@ -372,7 +372,7 @@ is_dirt_package_installed () {
 	if [ "$DIRT_DEBUG" ]; then
 		1>&2 echo ">>>is_dirt_package_installed $@"
 	fi
-	
+
 	local package_name=$1
 	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
 	if [ "$DIRT_DEBUG" ]; then
@@ -428,7 +428,7 @@ run_stages () {
 		else
 			PREFIX="${prefix}" PACKAGE_DIR="${package_dir}" make --file="${package_path}" $stage
 		fi
-		
+
 		if [ 0 -ne $? ]; then
 			1>&2 echo "Failed at stage: $stage"
 			exit 6
