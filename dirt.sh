@@ -116,36 +116,6 @@ command_sandbox () {
 	run_proot $package_name "/bin/bash"
 }
 
-# Not complete.
-run_fakechroot () {
-	if [ "$DIRT_DEBUG" ]; then
-		1>&2 echo ">>>run_fakechroot $@"
-	fi
-
-	local package_name=$1
-	# the shell command to run when we drop into fakechroot. (optional)
-	local shell_command=$2
-
-	local package_path="$(get_package_path $package_name)"
-	if [ -z "$package_path" ]; then
-		1>&2 echo "No dirt package '$package_name'.  Try specific version."
-		exit 3
-	fi
-
-	local package_dir="$(dirname "$package_path")"
-
-	local workspace="${DIRT_WORKSPACE_PATH}/${package_name}"
-	mkdir -p "${workspace}"
-
-	local prefix="${DIRT_INSTALL_PATH}/${package_name}"
-	mkdir -p "${prefix}"
-
-
-	mkdir -p "${DIRT_HOOK_PATH}"
-
-	# TODO
-}
-
 run_proot () {
 	if [ "$DIRT_DEBUG" ]; then
 		1>&2 echo ">>>run_proot $@"
@@ -178,6 +148,7 @@ run_proot () {
 
 	proot \
 	--rootfs="${DIRT_LOCATION}/dir-for-sandbox" \
+	--bind="${DIRT_LOCATION}":/_ \
 	--bind="${package_dir}":/package \
 	--bind="${workspace}":/workspace \
 	--bind="${prefix}":"${DIRT_HOOK_PATH}" \
