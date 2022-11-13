@@ -15,7 +15,7 @@ dependencies_debian:
 	@true
 
 # Space delimited list of other dirt packages.
-dependencies_dirt:
+list_dependencies_dirt:
 	@echo ''
 
 fetch:

@@ -15,7 +15,7 @@ dependencies_debian:
 	sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev fonts-averia-sans-gwf
 
 # Space delimited list of other dirt packages.
-dependencies_dirt:
+list_dependencies_dirt:
 	@echo 'beret-data-1.2.2'
 
 fetch:

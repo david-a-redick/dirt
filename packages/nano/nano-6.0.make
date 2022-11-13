@@ -15,9 +15,9 @@ dependencies_debian:
 	# Install debian packages.
 	sudo apt-get install libncurses-dev
 
-dependencies_dirt:
+list_dependencies_dirt:
 	# Install dirt packages
-	true
+	@echo ''
 
 fetch:
 	# Using a bundle here.  For hello we'll use their git repo.

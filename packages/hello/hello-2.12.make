@@ -16,8 +16,8 @@ dependencies_debian:
 	sudo apt-get install autopoint gperf texinfo help2man
 
 # Install dirt packages
-dependencies_dirt:
-	@true
+list_dependencies_dirt:
+	@echo ''
 
 fetch:
 	# Working directory will be set to the package's working directory (scratch space)

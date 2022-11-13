@@ -17,7 +17,7 @@ dependencies_debian:
 	@true
 
 # Install dirt packages
-dependencies_dirt:
+list_dependencies_dirt:
 	@true
 
 # Download the source code.

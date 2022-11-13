@@ -12,19 +12,25 @@ check_local:
 	@true
 
 # Install debian packages.
-# nsis is only needed if you build a Windows installer.
+# sudo apt-get install ...
 dependencies_debian:
+	# nsis is only needed if you build a Windows installer.
 	sudo apt-get install megaglest
 
 # Space delimited list of other dirt packages.
-dependencies_dirt:
+list_dependencies_dirt:
 	@echo ''
+
+##
+# All of the following stages will be done in a proot environment.
+# The real working directory will be: $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# The proot working directory will be: /workspace
+##
 
 # Download the source code.
 # Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
-# by default you'll be on the development branch, master is the most stable.
 fetch:
+	# by default you'll be on the development branch, master is the most stable.
 	git clone https://bitbucket.org/annexctw/annex
 
 # Perform any check sums or gpg signature verifications.
@@ -35,7 +41,7 @@ verify:
 extract:
 	@true
 
-# Known as prepare `patch` in ports.
+# Known as prepare 'patch' in ports.
 prepare:
 	@true
 
@@ -43,26 +49,24 @@ prepare:
 configure:
 	@true
 
+# Compile and otherwise package up for installation or distribution.
 build:
-	# Compile and otherwise package up for installation or distribution.
-
 	#cd annex/mk_release/linux
 	# makes a directory ../../../annex-release
 	#./make-release.sh --dataonly
 
 	# the above is really bundling everything into 7 zip file.
+	# there isn't a need for that in dirt.
 	@true
 
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
 test:
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
-
 	#test -f ./annex-release/snapshot/annex-data.7z
 	@true
 
+# Install the package to the local system.
 install_package:
-	# Install the package to the local system.
-
 	# if you're using the 7 zip approach then you'll just have
 	# extract everything.
 
@@ -83,8 +87,8 @@ install_package:
 	tilesets \
 	"$(PREFIX)/share/games/annex"
 
+# Any post install checks ands tests.
 check_install:
-	# Any post install checks ands tests.
 	megaglest --data-path="$(PREFIX)/share/games/annex"
 
 # Remove any configuration (dot files) and other files created during run time.

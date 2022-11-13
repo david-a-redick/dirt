@@ -6,72 +6,76 @@ PACKAGE_DIR ?= 'the directory (group) that the package is in - may contain signa
 schema:
 	@echo '0'
 
+# A sanity check of the local system.
+# Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
-	# A sanity check of the local system.
-	# Good place for things like CPU compatiblity, in case the application has inline assembler.
 	@true
 
+# Install debian packages.
+# sudo apt-get install ...
 dependencies_debian:
-	# Install debian packages.
 	sudo apt-get install libyaml-cpp-dev libsdl1.2-dev libsdl-mixer1.2-dev
 
 # Space delimited list of other dirt packages.
-dependencies_dirt:
+list_dependencies_dirt:
 	@echo 'pdcurses-3.9'
 
+##
+# All of the following stages will be done in a proot environment.
+# The real working directory will be: $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
+# The proot working directory will be: /workspace
+##
+
+# Download the source code.
+# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
 fetch:
-	# Download the source code.
-	# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
-	# The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 	git clone https://github.com/cymonsgames/ASCIIpOrtal.git
 	cd ASCIIpOrtal
 	git checkout v1.3-beta8
 	git checkout -b v1.3-beta8-dirt
 
-	# Note that the icon image used in AUR.
+	# Note that the icon image used in AUR
 	# IS NOT under a CC license and is a direct copy of Valve's copyrighted ascii art.
 	# https://www.deviantart.com/dj-zemar/art/The-Official-Portal-ASCII-Art-176976417
 
+# Perform any check sums or gpg signature verifications.
 verify:
-	# Perform any check sums or gpg signature verifications.
 	@true
 
+# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	# In the cases of bundled release (zip, etc), this step will unpack the bundle.
 	@true
 
+# Known as prepare 'patch' in ports.
 prepare:
-	# Known as prepare `patch` in ports.
 	cd ASCIIpOrtal && git apply "$(PACKAGE_DIR)/v1.3-beta8-dirt.patch"
 
+# Configure the source codes build setup.
 configure:
-	# Configure the source codes build setup.
 	@true
 
+# Compile and otherwise package up for installation or distribution.
 build:
-	# Compile and otherwise package up for installation or distribution.
-	# we have to define libraries and runtime shared resources
-	# under $HOME/.local or where ever
 	cd ASCIIpOrtal && make DESTDIR="$(PREFIX)" linux
 
+# Run unit tests and perform compilation verification.
+# Known as 'check' in AUR.
 test:
-	# Run unit tests and perform compilation verification.
-	# Known as `check` in AUR.
 	@true
 
+# Install the package to the local system.
 install_package:
-	# Install the package to the local system.
 	cd ASCIIpOrtal && make DESTDIR="$(PREFIX)" install
 	mkdir -p "$(PREFIX)/share/pixmaps/"
 	install --mode=644 "$(PACKAGE_DIR)/asciiportal.png" "$(PREFIX)/share/pixmaps"
 	mkdir -p "$(PREFIX)/share/applications"
 	install --mode=644 "$(PACKAGE_DIR)/asciiportal.desktop" "$(PREFIX)/share/applications"
 
+# Any post install checks ands tests.
 check_install:
-	# Any post install checks ands tests.
 	@true
 
+# Remove any configuration (dot files) and other files created during run time.
 purge:
-	# Remove any configuration (dot files) and other files created during run time.
 	@true
 
