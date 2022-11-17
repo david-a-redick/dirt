@@ -9,7 +9,13 @@ schema:
 # A sanity check of the local system.
 # Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
-	@echo "Cant figure out how to find local gconfmm"
+	@echo 'So the people running libsigc++ have broken things in the 2.x series but they dont bump the major version.'
+	@echo 'Its a nightmare'
+	@echo 'Only version I can dig up is libsigc++-2.0-0c2a (>= 2.0.2)
+	@echo 'from: https://ccdw.org/~cjj/files/debs/Packages'
+	@echo 'maybe this branch as another dev depend https://github.com/libsigcplusplus/libsigcplusplus/tree/origin/libsigc-2-0'
+	@echo ''
+	@echo 'FU: https://github.com/libsigcplusplus/libsigcplusplus/blob/master/NEWS#L393'
 	@false
 
 dependencies_debian:
@@ -32,9 +38,13 @@ extract:
 prepare:
 	@true
 
+# Configure the source codes build setup.
+# This is probably Debian 11 specific.
+# Over the year the default location for C++ headers have drifted
+# from the once sane defaults in the autoconf for this package 
+CXXFLAGS='-I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10'
 configure:
-	# Configure the source codes build setup.
-	cd ccgo-0.3.6.5 && ./configure --prefix="$(PREFIX)"
+	cd ccgo-0.3.6.5 && CXXFLAGS=$(CXXFLAGS) ./configure --prefix="$(PREFIX)"
 
 build:
 	# Compile and otherwise package up for installation or distribution.

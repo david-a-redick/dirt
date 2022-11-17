@@ -14,7 +14,8 @@
 # and print to stderr ">>>FUNCTION_NAME $@" at function entry.
 # You can set this via command line at exec time.
 # $ DIRT_DEBUG=1 ./dirt.sh CMD PGK
-if [ "$DIRT_DEBUG" ]; then
+# DIRT_DEBUG=2 will dump everything!
+if [ "2" = "$DIRT_DEBUG" ]; then
 	export DIRT_DEBUG
 	# print commands with prefix '+'
 	set -x
@@ -41,7 +42,7 @@ usage () {
 		1>&2 echo ">>>usage $@"
 	fi
 
-	local message='dirt.sh COMMAND PACKAGE_NAME'
+	local message='usage: dirt.sh COMMAND PACKAGE_NAME'
 	if [ -n "$2" ]; then
 		message=$2
 	fi
@@ -61,9 +62,11 @@ help () {
 	printf '
 search NAME - Will search for any hits on the given NAME in both package files and group directories.
 
-install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
+install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install` but will NOT hook.
 
 stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
+
+depends PACKAGE_NAME - Will list the dirt dependencies but will not install them. `stage P list_dependencies_dirt` will!
 
 sandbox PACKAGE_NAME - Will create a proot sandbox environment and create a shell for you to explore.
 
@@ -105,6 +108,21 @@ main () {
 		1>&2 echo "Unknown command ${to_run}"
 		exit 2
 	fi
+}
+
+command_depends () {
+	if [ "$DIRT_DEBUG" ]; then
+		1>&2 echo ">>>command_depends $@"
+	fi
+
+	local package_name=$1
+	local package_path="$(get_package_path $package_name)"
+	if [ -z "$package_path" ]; then
+		1>&2 echo "No dirt package '$package_name'"
+		exit 3
+	fi
+	# note: using command_stage will actually install the dependencies.
+	make --file="${package_path}" 'list_dependencies_dirt'
 }
 
 command_sandbox () {

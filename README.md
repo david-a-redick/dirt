@@ -70,21 +70,7 @@ $ cd dirt
 $ nano configuration.sh
 
 $ ./dirt.sh --help
-dirt.sh COMMAND PACKAGE_NAME
-
-search NAME - Will search for any hits on the given NAME in both package files and group directories.
-
-install PACKAGE_NAME - Will run through the all the stages from `check_local` to `check_install`
-
-stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
-
-sandbox PACKAGE_NAME - Will create a proot sandbox environment and create a shell for you to explore.
-
-hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
-
-unhook PACKAGE_NAME - Will remove all the file done by the `hook` command.
-
-clean PACKAGE_NAME - Will unhook, delete the install and workspace directories of the package.
+[see help.txt](./help.txt)
 ```
 
 Download and compile and bundle an example package.
@@ -110,9 +96,6 @@ Play, test and when you're done.
 ```shell
 $ mkdir packages/FOO
 $ ./scripts/print-package-template.sh > ./packages/FOO/FOO-1.2.3.make
-$ cd packages-by-category/GENTOO-CATEGORY/
-$ ln -s ../../packages/FOO FOO
-$ cd ../..
 $ nano ./packages/FOO/FOO-1.2.3.make
 $ ./dirt.sh install FOO-1.2.3
 ```

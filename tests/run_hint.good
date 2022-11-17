@@ -1,1 +1,1 @@
-dirt.sh COMMAND PACKAGE_NAME
+usage: dirt.sh COMMAND PACKAGE_NAME

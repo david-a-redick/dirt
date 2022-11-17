@@ -6,6 +6,8 @@ install PACKAGE_NAME - Will run through the all the stages from `check_local` to
 
 stage PACKAGE_NAME STAGE_NAME - Will only run the given stage for the given package.
 
+depends PACKAGE_NAME - Will list the dirt dependencies but will not install them. `stage P list_dependencies_dirt` will!
+
 sandbox PACKAGE_NAME - Will create a proot sandbox environment and create a shell for you to explore.
 
 hook PACKAGE_NAME - Will hook the package into use in the local environment (by default ~/.local).
