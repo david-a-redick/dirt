@@ -23,7 +23,7 @@ list_dependencies_dirt:
 	@echo ''
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 # The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 fetch:
 	@true

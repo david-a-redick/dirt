@@ -21,7 +21,7 @@ list_dependencies_dirt:
 	@true
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 # The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 fetch:
 	wget https://github.com/proot-me/proot/archive/refs/tags/v5.1.0.tar.gz

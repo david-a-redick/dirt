@@ -19,7 +19,7 @@ list_dependencies_dirt:
 	@echo ''
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 # The working directory will be $DIRT_WORKSPACE_PATH/$PACKAGE_NAME/
 fetch:
 	wget https://download.gnome.org/sources/gconfmm/2.28/gconfmm-2.28.3.tar.xz
@@ -36,12 +36,8 @@ prepare:
 	@true
 
 # Configure the source codes build setup.
-# This is probably Debian 11 specific.
-# Over the year the default location for C++ headers have drifted
-# from the once sane defaults in the autoconf for this package 
-CXXFLAGS='-I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10'
 configure:
-	cd gconfmm-2.28.3 && CXXFLAGS=$(CXXFLAGS) ./configure --prefix="$(PREFIX)"
+	cd gconfmm-2.28.3 && ./configure --prefix="$(PREFIX)"
 
 # Compile and otherwise package up for installation or distribution.
 build:

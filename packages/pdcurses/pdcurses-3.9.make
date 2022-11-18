@@ -27,7 +27,7 @@ list_dependencies_dirt:
 ##
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 fetch:
 	git clone https://github.com/wmcbrine/PDCurses.git
 	cd PDCurses && git checkout 3.9

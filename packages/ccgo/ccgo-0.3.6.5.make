@@ -39,12 +39,8 @@ prepare:
 	@true
 
 # Configure the source codes build setup.
-# This is probably Debian 11 specific.
-# Over the year the default location for C++ headers have drifted
-# from the once sane defaults in the autoconf for this package 
-CXXFLAGS='-I/usr/include/c++/10 -I/usr/include/x86_64-linux-gnu/c++/10'
 configure:
-	cd ccgo-0.3.6.5 && CXXFLAGS=$(CXXFLAGS) ./configure --prefix="$(PREFIX)"
+	cd ccgo-0.3.6.5 && ./configure --prefix="$(PREFIX)"
 
 build:
 	# Compile and otherwise package up for installation or distribution.

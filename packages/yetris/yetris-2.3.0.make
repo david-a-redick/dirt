@@ -14,7 +14,7 @@ check_local:
 # Install debian packages.
 # sudo apt-get install ...
 dependencies_debian:
-	@true
+	sudo apt-get install libncurses5-dev
 
 # Space delimited list of other dirt packages.
 list_dependencies_dirt:
@@ -27,9 +27,9 @@ list_dependencies_dirt:
 ##
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 fetch:
-	@true
+	wget https://github.com/alexdantas/yetris/archive/refs/tags/v2.3.0.tar.gz
 
 # Perform any check sums or gpg signature verifications.
 verify:
@@ -37,11 +37,11 @@ verify:
 
 # In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	@true
+	# extract to directory: yetris-2.3.0
+	tar -xf v2.3.0.tar.gz
 
 # Known as prepare 'patch' in ports.
 prepare:
-	@true
 
 # Configure the source codes build setup.
 configure:
@@ -49,7 +49,7 @@ configure:
 
 # Compile and otherwise package up for installation or distribution.
 build:
-	@true
+	cd yetris-2.3.0 && make PREFIX="$(PREFIX)"
 
 # Run unit tests and perform compilation verification.
 # Known as 'check' in AUR.
@@ -58,7 +58,7 @@ test:
 
 # Install the package to the local system.
 install_package:
-	@true
+	cd yetris-2.3.0 && make install PREFIX="$(PREFIX)"
 
 # Any post install checks ands tests.
 check_install:

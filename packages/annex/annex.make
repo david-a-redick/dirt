@@ -28,7 +28,7 @@ list_dependencies_dirt:
 ##
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 fetch:
 	# by default you'll be on the development branch, master is the most stable.
 	git clone https://bitbucket.org/annexctw/annex

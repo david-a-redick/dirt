@@ -27,7 +27,7 @@ list_dependencies_dirt:
 ##
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 fetch:
 	wget https://github.com/Andrettin/Wyrmsun/archive/refs/tags/v5.3.4.tar.gz -O Wyrmsun_5.3.4-1.orig.tar.gz
 

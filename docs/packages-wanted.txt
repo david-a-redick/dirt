@@ -17,6 +17,7 @@ and paragraph counts.
 average word length.  average paragraph length.
 character distribution.
 sentences. average sentence length.
+
 https://github.com/bitcoin-core/secp256k1
 
 https://cdemu.sourceforge.io/
@@ -24,7 +25,6 @@ webfsd
 gource
 ctopy
 GNU mtools
-FIX ccgo
 http://www.qtile.org/
 https://github.com/tailhook/tilenol
 http://tombaran.info/autotalent.html
@@ -64,7 +64,3 @@ Package libtasn1 was not found in the pkg-config search path.
 Perhaps you should add the directory containing `libtasn1.pc'
 to the PKG_CONFIG_PATH environment variable
 No package 'libtasn1' fou
-
-
-
-

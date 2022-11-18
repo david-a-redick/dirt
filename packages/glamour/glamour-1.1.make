@@ -29,7 +29,7 @@ list_dependencies_dirt:
 ##
 
 # Download the source code.
-# Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+# Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 fetch:
 	wget https://launchpad.net/glamour/trunk/1.1/+download/glamour.tar.gz
 

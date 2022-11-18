@@ -164,6 +164,9 @@ run_proot () {
 		1>&2 echo ">>> Entering proot"
 	fi
 
+	# These paths are probably Debian 11 specific.
+	# Needed because g++ in proot doesn't work right.
+	CPLUS_INCLUDE_PATH=/usr/include/c++/10:/usr/include/x86_64-linux-gnu/c++/10 \
 	proot \
 	--rootfs="${DIRT_LOCATION}/dir-for-sandbox" \
 	--bind="${DIRT_LOCATION}":/dirt \
@@ -174,12 +177,16 @@ run_proot () {
 	--bind="${DIRT_INSTALL_PATH}":/install \
 	--cwd=/ \
 	--bind=/bin \
+	--bind=/boot \
 	--bind=/dev \
 	--bind=/etc \
 	--bind=/lib \
 	--bind=/lib32 \
 	--bind=/lib64 \
 	--bind=/libx32 \
+	--bind=/media \
+	--bind=/mnt \
+	--bind=/opt \
 	--bind=/proc \
 	--bind=/run \
 	--bind=/sbin \

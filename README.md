@@ -34,7 +34,7 @@ NOTE: There are no pre or post functions as in ports.
 
 `list_dependencies_dirt` - Will run `dirt.sh install ...` for all the dirt packages.
 
-`fetch` - Download the source code.  Could be cloning the repo (preferred) or could be a packaged release bundle (tar ball, etc).
+`fetch` - Download the source code.  Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 
 `verify` - Perform any check sums or gpg signature verifications.
 
