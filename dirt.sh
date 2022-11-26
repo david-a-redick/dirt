@@ -386,7 +386,7 @@ get_package_group () {
 		1>&2 echo ">>>get_package_group $@"
 	fi
 
-	echo ${1%%-*}
+	echo ${1%-*}
 }
 
 # It is possible for the directory to be there but nothing in it.
