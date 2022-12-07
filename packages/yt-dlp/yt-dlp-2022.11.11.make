@@ -9,12 +9,13 @@ schema:
 # A sanity check of the local system.
 # Good place for things like CPU compatiblity, in case the application has inline assembler.
 check_local:
-	@true
+	@echo 'dies when building supportedsites.md'
+	@false
 
 # Install debian packages.
 # sudo apt-get install ...
 dependencies_debian:
-	sudo apt-get install pandoc python3
+	@true
 
 # Space delimited list of other dirt packages.
 list_dependencies_dirt:
@@ -29,7 +30,7 @@ list_dependencies_dirt:
 # Download the source code.
 # Could be cloning the repo or could be a packaged release bundle (tar ball, etc).
 fetch:
-	wget https://github.com/ytdl-org/youtube-dl/archive/refs/tags/2021.12.17.tar.gz
+	wget https://github.com/yt-dlp/yt-dlp/archive/refs/tags/2022.11.11.tar.gz
 
 # Perform any check sums or gpg signature verifications.
 verify:
@@ -37,8 +38,8 @@ verify:
 
 # In the cases of bundled release (zip, etc), this step will unpack the bundle.
 extract:
-	# expands to youtube-dl-2021.12.17
-	tar -xf 2021.12.17.tar.gz
+	# extracts to yt-dlp-2022.11.11
+	tar -xf 2022.11.11.tar.gz
 
 # Known as prepare 'patch' in ports.
 prepare:
@@ -50,7 +51,7 @@ configure:
 
 # Compile and otherwise package up for installation or distribution.
 build:
-	cd youtube-dl-2021.12.17 && PREFIX="$(PREFIX)" PYTHON="/usr/bin/env python3" make
+	cd yt-dlp-2022.11.11 && PREFIX="$(PREFIX)" PYTHON="/usr/bin/env python3" make
 
 # Run unit tests and perform compilation verification.
 # Known as 'check' in AUR.
@@ -59,7 +60,7 @@ test:
 
 # Install the package to the local system.
 install_package:
-	cd youtube-dl-2021.12.17 && PREFIX="$(PREFIX)" PYTHON="/usr/bin/env python3" make install
+	cd yt-dlp-2022.11.11 && PREFIX="$(PREFIX)" PYTHON="/usr/bin/env python3" make install
 
 # Any post install checks ands tests.
 check_install:
