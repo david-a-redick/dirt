@@ -18,8 +18,11 @@ average word length.  average paragraph length.
 character distribution.
 sentences. average sentence length.
 
+https://www.catb.org/~esr/ctopy/
+https://aur.archlinux.org/packages/gmchess
 https://github.com/bitcoin-core/secp256k1
-
+https://uninformativ.de/git/katriawm
+https://www.uninformativ.de/git/nhkd/files.html
 https://cdemu.sourceforge.io/
 webfsd
 gource
@@ -54,9 +57,10 @@ muby
 Potato
 Soiled
 Trebuchet
-
+https://github.com/kaldi-asr/kaldi
 http://home.swipnet.se/heathen/linux/sclient.htm
-
+https://sourceforge.net/projects/deluge/files/   <-- will have to package under deluge-web-test
+https://sourceforge.net/projects/cdrtools/files/ <-- AUR
 
 
 configure:16933: $PKG_CONFIG --exists --print-errors "libtasn1 >= 2.3"
