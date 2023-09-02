@@ -1,3 +1,0 @@
-The install should stop here.
-make: *** [/home/redick/source/dirt/packages/dirt/dirt-failure_check_local.make:9: check_local] Error 1
-Failed at stage: check_local

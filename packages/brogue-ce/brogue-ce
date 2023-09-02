@@ -1,9 +1,0 @@
-#!/bin/sh
-
-DIR=$(dirname "$0")
-DIR="${DIR}/../share/brogue-ce"
-
-LOCATION=$(realpath "$DIR")
-cd "$LOCATION"
-./brogue $*
-

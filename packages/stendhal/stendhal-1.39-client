@@ -1,9 +1,0 @@
-#!/bin/sh
-
-SCRIPT_FULL_PATH="$(realpath "$0")"
-LOCATION="$(dirname "${DIRT_SCRIPT_FULL_PATH}")"
-
-# yes the current dir on the classpath is necessary
-# why? redick is guessing that the arg parser is wonky
-cd "${LOCATION}/../libexec/stendhal" && \
-java -classpath *:. games.stendhal.client.stendhal
